@@ -60,13 +60,57 @@ public final class Constants {
     public static final int kFrontLeftTurningCanId = 4;
     public static final int kRearLeftTurningCanId = 6;
     public static final int kFrontRightTurningCanId = 1;
-    public static final int kRearRightTurningCanId = 8         ;
+    public static final int kRearRightTurningCanId = 8;
 
-    public static final boolean kGyroReversed = false;
+    public static final boolean kGryoReversed = false;
   
   
     
   }
+  public static class LauncherConstants 
+  {
+    // PWM ports/CAN IDs for motor controllers
+    public static final int kTopLaunchWheelID = 11;
+    public static final int kBottomLaunchWheelID = 12;
+
+    public static final int kFeederWheelID = 10;
+
+    // Current limit for launcher and feed wheels1
+    public static final int kBottomLaunchWheelCurrentLimit = 80;
+    public static final int kTopLaunchWheelCurrentLimit = 80;
+
+    public static final int kFeederWheelCurrentLimit = 80;
+
+    // Speeds for wheels when launching. 
+   public static final double kBottomLaunchWheelSpeed = .22;
+   public static final double kTopLaunchWheelSpeed = .37;
+
+   public static final double kFeederWheelSpeed = 1;
+   
+
+    // public static final double kBottomLaunchWheelSpeed = 1;
+    // public static final double kTopLaunchWheelSpeed = 1;
+   
+
+    public static final double kLauncherDelay = 0;
+  }
+
+  //Constants for the intake subsystem
+  public static class IntakeConstants{
+    // Intake Motor ID numbers
+    public static final int kTopIntakeWheelID = 14;
+    public static final int kBottomIntakeWheelID = 13;
+
+    //Sets current limit for intkae wheels
+    public static final int kTopIntakeWheelCurrentLimit = 80;
+    public static final int kBottomIntakeWheelCurrentLimit = 80;
+
+    //Sets the speed for the intake wheels
+    public static final double kTopIntakeWheelSpeed = 1;
+    public static final double kBottomIntakeWheelSpeed = 1;
+
+  }
+
   // Pigeon 2 CAN ID
   public static final int gryoPigeonCanID = 15;
   public static final class ModuleConstants {
@@ -123,6 +167,7 @@ public final class Constants {
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.1;
+    public static final int kOperatorControllerPort = 1;
   }
 
   public static final class AutoConstants {

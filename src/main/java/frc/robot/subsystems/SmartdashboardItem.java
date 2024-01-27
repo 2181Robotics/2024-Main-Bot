@@ -16,4 +16,10 @@ private final String m_module;
     public void setNumber(double value){
         SmartDashboard.putNumber(m_module, value);
     }
+
+    public double getNumber(){
+        double numberValue;
+        numberValue = SmartDashboard.getNumber(m_module, 0);
+        return numberValue;
+    }
 }
