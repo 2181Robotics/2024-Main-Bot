@@ -29,21 +29,13 @@ import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
+// Import all subsystems for the robot
 
-// These should be removed if still un needed by week 6
-//import edu.wpi.first.math.controller.PIDController;
-//import edu.wpi.first.math.controller.ProfiledPIDController;
-//import edu.wpi.first.math.geometry.Pose2d;
-//import edu.wpi.first.math.geometry.Rotation2d;
-//import edu.wpi.first.math.geometry.Translation2d;
-//import edu.wpi.first.math.trajectory.Trajectory;
-//import edu.wpi.first.math.trajectory.TrajectoryConfig;
-//import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-//import frc.robot.Constants.AutoConstants;
-//import frc.robot.Constants.DriveConstants;
-//import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-//import java.util.List;
+import frc.robot.subsystems.Launcher;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Feeder;
 
 
 /*
@@ -59,8 +51,13 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
+  private final Launcher m_Launcher = new Launcher();
+  private final Intake m_Intake = new Intake();
+  private final Feeder m_Feeder = new Feeder();
+
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
   // Establishing the Auto Chooser that will appear on the SmartDashboard
 
@@ -73,10 +70,8 @@ public class RobotContainer {
    */
   public RobotContainer() {
     
-    
     // Configure the button bindings
     configureButtonBindings();
-
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(
@@ -106,6 +101,10 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
+
+            m_operatorController.leftBumper().whileTrue(m_Launcher.getLaunchCommand());
+            m_operatorController.rightBumper().whileTrue(m_Feeder.getFeederWheelCommand());
+            m_operatorController.a().whileTrue(m_Intake.getIntakeCommand());
   }
 
   /**
