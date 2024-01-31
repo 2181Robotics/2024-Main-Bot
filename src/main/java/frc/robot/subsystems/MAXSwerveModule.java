@@ -4,9 +4,11 @@
 
 package frc.robot.subsystems;
 
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.robot.Constants.ModuleConstants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -15,7 +17,7 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 
-import frc.robot.Constants.ModuleConstants;
+
 
 public class MAXSwerveModule {
   private final CANSparkMax m_drivingSparkMax;
@@ -155,10 +157,8 @@ public class MAXSwerveModule {
     m_turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
 
     m_desiredState = desiredState;
-  }
+  
 
-  /** Zeroes all the SwerveModule encoders. */
-  public void resetEncoders() {
-    m_drivingEncoder.setPosition(0);
+
   }
 }
