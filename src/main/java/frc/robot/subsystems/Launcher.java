@@ -1,14 +1,9 @@
 package frc.robot.subsystems;
 
-
-
 import static frc.robot.Constants.LauncherConstants.*;
-
-
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -17,37 +12,30 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 public class Launcher extends SubsystemBase {
   CANSparkMax m_BottomLaunchWheel;
   CANSparkMax m_TopLaunchWheel;
-  CANSparkMax m_FeederWheel;
 
   SmartdashboardItem m_BottomLauchWheelSpeed;
   SmartdashboardItem m_TopLaunchWheelSpeed;
-  SmartdashboardItem m_FeederWheelSpeed;
 
   SmartdashboardItem m_TopLaunchWheelCommandSpeed;
   SmartdashboardItem m_BottomLaunchWheelCommandSpeed;
-  SmartdashboardItem m_FeederWheelCommandSpeed;
   
 
   /** Creates a new Launcher. */
   public Launcher() {
     m_BottomLaunchWheel = new CANSparkMax(kBottomLaunchWheelID,MotorType.kBrushless);
-    m_TopLaunchWheel = new CANSparkMax(kTopLaunchWheelID, MotorType.kBrushless );
+    m_TopLaunchWheel = new CANSparkMax(kTopLaunchWheelID, MotorType.kBrushless);
 
     m_BottomLauchWheelSpeed = new SmartdashboardItem("BottomLaunchWheelSpeed");
     m_TopLaunchWheelSpeed = new SmartdashboardItem("TopLaunchWheelSpeed");
-    m_FeederWheelSpeed = new SmartdashboardItem("FeederWheelSpeed");
 
     m_TopLaunchWheelCommandSpeed = new SmartdashboardItem("TopLaunchWheelCommandSpeed");
     m_BottomLaunchWheelCommandSpeed = new SmartdashboardItem("BottomLaunchCommandSpeed");
-    m_FeederWheelCommandSpeed = new SmartdashboardItem("FeederWheelCommandSpeed");
 
     m_BottomLaunchWheel.setSmartCurrentLimit(kBottomLaunchWheelCurrentLimit);
     m_TopLaunchWheel.setSmartCurrentLimit(kTopLaunchWheelCurrentLimit);
-    //m_FeederWheel.setSmartCurrentLimit(kFeederWheelCurrentLimit);
 
     m_BottomLaunchWheelCommandSpeed.setNumber(kBottomLaunchWheelSpeed);
     m_TopLaunchWheelCommandSpeed.setNumber(kTopLaunchWheelSpeed);
-    m_FeederWheelCommandSpeed.setNumber(kFeederWheelSpeed);
   }
 
   /**
@@ -68,7 +56,8 @@ public class Launcher extends SubsystemBase {
         },
         // When the command stops, stop the wheels
         () -> {
-          stop();
+          setTopLaunchWheel(0);
+          setBottomLaunchWheel(0);
         });
   }
 
@@ -87,34 +76,10 @@ public class Launcher extends SubsystemBase {
   public void stop() {
     m_BottomLaunchWheel.set(0);
     m_TopLaunchWheel.set(0);
-    m_FeederWheel.set(0);
   }
   public void getEncoders() {
     m_BottomLauchWheelSpeed.setNumber(m_BottomLaunchWheel.getEncoder().getVelocity());
     m_TopLaunchWheelSpeed.setNumber(m_TopLaunchWheel.getEncoder().getVelocity());
-    m_FeederWheelSpeed.setNumber(m_FeederWheel.getEncoder().getVelocity());
   }
-
-//Feeder Wheel Code
-  
-    public Command getFeederWheelCommand(){
-
-        return this.startEnd(
-            // When the command is initialized, set the wheels to the intake speed values
-            () -> {
-              setFeederWheel(m_FeederWheelCommandSpeed.getNumber());
-              getEncoders();
-              
-            },
-            // When the command stops, stop the wheels
-            () -> {
-              stop();
-            });
-        //m_leftRear.set(speed);
-    }
-
-    public void setFeederWheel(double speed){
-      m_FeederWheel.set(speed);
-    }
 }
 

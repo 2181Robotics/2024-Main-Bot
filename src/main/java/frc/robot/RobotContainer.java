@@ -17,10 +17,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.LauncherConstants;
+//import frc.robot.Constants.LauncherConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.SmartdashboardItem;
+//import frc.robot.subsystems.SmartdashboardItem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -29,6 +29,7 @@ import java.util.List;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Feeder;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -40,8 +41,9 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
-  private final Launcher m_launcher = new Launcher();
+  private final Launcher m_Launcher = new Launcher();
   private final Intake m_Intake = new Intake();
+  private final Feeder m_Feeder = new Feeder();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -82,8 +84,8 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
     
-    m_operatorController.leftBumper().whileTrue(m_launcher.getLaunchCommand());
-    m_operatorController.rightBumper().whileTrue(m_launcher.getFeederWheelCommand());
+    m_operatorController.leftBumper().whileTrue(m_Launcher.getLaunchCommand());
+    m_operatorController.rightBumper().whileTrue(m_Feeder.getFeederWheelCommand());
     m_operatorController.a().whileTrue(m_Intake.getIntakeCommand());
   }
 

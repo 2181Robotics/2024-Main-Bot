@@ -23,7 +23,7 @@ import edu.wpi.first.math.util.Units;
  * wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {
+public class Constants {
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
@@ -82,14 +82,14 @@ public final class Constants {
     public static final int kFeederWheelCurrentLimit = 80;
 
     // Speeds for wheels when launching. 
-   public static final double kBottomLaunchWheelSpeed = .22;
-   public static final double kTopLaunchWheelSpeed = .37;
+   //public static final double kBottomLaunchWheelSpeed = .22;
+   //public static final double kTopLaunchWheelSpeed = .37;
 
    public static final double kFeederWheelSpeed = 1;
    
 
-    // public static final double kBottomLaunchWheelSpeed = 1;
-    // public static final double kTopLaunchWheelSpeed = 1;
+    public static final double kBottomLaunchWheelSpeed = 1;
+    public static final double kTopLaunchWheelSpeed = 1;
    
 
     public static final double kLauncherDelay = 0;
@@ -106,8 +106,8 @@ public final class Constants {
     public static final int kBottomIntakeWheelCurrentLimit = 80;
 
     //Sets the speed for the intake wheels
-    public static final double kTopIntakeWheelSpeed = 1;
-    public static final double kBottomIntakeWheelSpeed = 1;
+    public static final double kTopIntakeWheelSpeed = -.25;
+    public static final double kBottomIntakeWheelSpeed = .25;
 
   }
 

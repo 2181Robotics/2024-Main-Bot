@@ -23,7 +23,7 @@ public class Intake extends SubsystemBase {
 
     public Intake(){
     m_BottomIntakeWheel = new CANSparkMax(kBottomIntakeWheelID,MotorType.kBrushless);
-    m_TopIntakeWheel = new CANSparkMax(kTopIntakeWheelID, MotorType.kBrushless );
+    m_TopIntakeWheel = new CANSparkMax(kTopIntakeWheelID, MotorType.kBrushless);
 
     m_BottomIntakeWheelSpeed = new SmartdashboardItem("BottomIntakeWheelSpeed");
     m_TopIntakeWheelSpeed = new SmartdashboardItem("TopIntakeWheelSpeed");
@@ -59,7 +59,7 @@ public class Intake extends SubsystemBase {
       }
 
       public void setBottomIntakeWheel(double speed){
-        m_TopIntakeWheel.set(speed);
+        m_BottomIntakeWheel.set(speed);
       }    
     
       //Sets Intake wheels' speed to 0
