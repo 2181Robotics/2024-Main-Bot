@@ -82,14 +82,14 @@ public class Constants {
     public static final int kFeederWheelCurrentLimit = 80;
 
     // Speeds for wheels when launching. 
-   //public static final double kBottomLaunchWheelSpeed = .22;
-   //public static final double kTopLaunchWheelSpeed = .37;
+   public static final double kBottomLaunchWheelAmpSpeed = .37;
+   public static final double kTopLaunchWheelAmpSpeed = .22;
 
-   public static final double kFeederWheelSpeed = 1;
+   public static final double kFeederWheelSpeed = .5;
    
 
-    public static final double kBottomLaunchWheelSpeed = 1;
-    public static final double kTopLaunchWheelSpeed = 1;
+    public static final double kBottomLaunchWheelSpeakerSpeed = 1;
+    public static final double kTopLaunchWheelSpeakerSpeed = 1;
    
 
     public static final double kLauncherDelay = 0;

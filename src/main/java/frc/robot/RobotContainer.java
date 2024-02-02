@@ -84,9 +84,11 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
     
-    m_operatorController.leftBumper().whileTrue(m_Launcher.getLaunchCommand());
-    m_operatorController.rightBumper().whileTrue(m_Feeder.getFeederWheelCommand());
-    m_operatorController.a().whileTrue(m_Intake.getIntakeCommand());
+    m_operatorController.y().whileTrue(m_Launcher.getLaunchSpeakerCommand());
+    m_operatorController.a().whileTrue(m_Launcher.getLaunchAmpCommand());
+    m_operatorController.rightTrigger().whileTrue(m_Feeder.getFeederWheelCommand(false));
+    m_operatorController.leftTrigger().whileTrue(m_Feeder.getReverseFeederCommand());
+    m_operatorController.b().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelCommand(true)));
   }
 
   /**

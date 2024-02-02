@@ -3,10 +3,10 @@ package frc.robot.subsystems;
 
     import static frc.robot.Constants.IntakeConstants.*;
 
-    import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj2.command.Command;
     import edu.wpi.first.wpilibj2.command.SubsystemBase;
-    
-
+    import frc.robot.subsystems.Feeder;
     import com.revrobotics.CANSparkMax;
     import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -19,33 +19,39 @@ public class Intake extends SubsystemBase {
 
     SmartdashboardItem m_TopIntakeWheelCommandSpeed;
     SmartdashboardItem m_BottomIntakeWheelCommandSpeed;
+    DigitalInput m_FeederStop;
+    Feeder m_fEeder;
 
 
     public Intake(){
     m_BottomIntakeWheel = new CANSparkMax(kBottomIntakeWheelID,MotorType.kBrushless);
     m_TopIntakeWheel = new CANSparkMax(kTopIntakeWheelID, MotorType.kBrushless);
-
-    m_BottomIntakeWheelSpeed = new SmartdashboardItem("BottomIntakeWheelSpeed");
-    m_TopIntakeWheelSpeed = new SmartdashboardItem("TopIntakeWheelSpeed");
+    // m_BottomIntakeWheelSpeed = new SmartdashboardItem("BottomIntakeWheelSpeed");
+    // m_TopIntakeWheelSpeed = new SmartdashboardItem("TopIntakeWheelSpeed");
 
     m_BottomIntakeWheelCommandSpeed = new SmartdashboardItem("BottomIntakeCommandSpeed");
-    m_TopIntakeWheelCommandSpeed = new SmartdashboardItem("TopIntakeWheelCommandSpeed");
+    m_TopIntakeWheelCommandSpeed = new SmartdashboardItem("TopIntakeWheelCommandSpeed"); 
 
     m_BottomIntakeWheel.setSmartCurrentLimit(kBottomIntakeWheelCurrentLimit);
     m_TopIntakeWheel.setSmartCurrentLimit(kTopIntakeWheelCurrentLimit);
 
     m_BottomIntakeWheelCommandSpeed.setNumber(kBottomIntakeWheelSpeed);
     m_TopIntakeWheelCommandSpeed.setNumber(kTopIntakeWheelSpeed);
+
+    m_FeederStop = new DigitalInput(9);
+    
     }
 
     public Command getIntakeCommand() {
         // The startEnd helper method takes a method to call when the command is initialized and one to
         // call when it ends
-        return this.startEnd(
+        return this.runEnd(
             // When the command is initialized, set the wheels to the intake speed values
             () -> {
-              setTopIntakeWheel(m_TopIntakeWheelCommandSpeed.getNumber());
-              setBottomIntakeWheel(m_BottomIntakeWheelCommandSpeed.getNumber());
+             if(!m_FeederStop.get()){
+              setTopIntakeWheel(kTopIntakeWheelSpeed);
+              setBottomIntakeWheel(kBottomIntakeWheelSpeed);
+             }
             },
             // When the command stops, stop the wheels
             () -> {
