@@ -15,6 +15,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.urcl.URCL;
 
+import com.pathplanner.lib.pathfinding.Pathfinding;
 
 //Base packages
 
@@ -48,6 +49,7 @@ public class Robot extends LoggedRobot {
     // Initiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     initializeLogging();
+    Pathfinding.setPathfinder(new LocalADStarAK());
     m_robotContainer = new RobotContainer();
   }
 

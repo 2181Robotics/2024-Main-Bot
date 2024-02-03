@@ -76,6 +76,22 @@ public class DriveSubsystem extends SubsystemBase {
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
+
+  private SmartdashboardItem SDAngle = new SmartdashboardItem("Pigeon Angle");
+  // private SmartdashboardItem SDFrontLeftPos = new SmartdashboardItem("Front Left Position");
+  // private SmartdashboardItem SDFrontRightPos = new SmartdashboardItem("Front Right Position");
+  // private SmartdashboardItem SDRearRightPos = new SmartdashboardItem("Rear Right Position");
+  // private SmartdashboardItem SDRearLeftPos = new SmartdashboardItem("Rear Left Position");
+  private SmartdashboardItem SDXSpeed = new SmartdashboardItem("Commanded X Speed");
+  private SmartdashboardItem SDYSpeed = new SmartdashboardItem("Commanded Y Speed");
+  private SmartdashboardItem SDRotation = new SmartdashboardItem("Commanded Rotation");
+
+
+
+
+
+
+
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
@@ -147,6 +163,8 @@ AutoBuilder.configureHolonomic(
   });
   Logger.recordOutput("Chassis/Pose", getPose());
 
+  SDAngle.setNumber(m_gyro.getAngle());
+
   }
 
   /**
@@ -189,6 +207,11 @@ AutoBuilder.configureHolonomic(
     
     double xSpeedCommanded;
     double ySpeedCommanded;
+
+    SDXSpeed.setNumber(xSpeed);
+    SDYSpeed.setNumber(ySpeed);
+    SDRotation.setNumber(rot);
+
 
     if (rateLimit) {
       // Convert XY to polar for rate limiting
@@ -243,6 +266,8 @@ AutoBuilder.configureHolonomic(
     double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
     double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
 
+
+    
     drive(new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered), fieldRelative);
   }
 
