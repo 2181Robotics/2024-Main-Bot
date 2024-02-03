@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
     import edu.wpi.first.wpilibj2.command.SubsystemBase;
-    import frc.robot.subsystems.Feeder;
     import com.revrobotics.CANSparkMax;
     import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -19,8 +18,8 @@ public class Intake extends SubsystemBase {
 
     SmartdashboardItem m_TopIntakeWheelCommandSpeed;
     SmartdashboardItem m_BottomIntakeWheelCommandSpeed;
-    DigitalInput m_FeederStop;
-    Feeder m_fEeder;
+    //DigitalInput m_FeederStop;
+    //Feeder m_fEeder;
 
 
     public Intake(){
@@ -38,7 +37,7 @@ public class Intake extends SubsystemBase {
     m_BottomIntakeWheelCommandSpeed.setNumber(kBottomIntakeWheelSpeed);
     m_TopIntakeWheelCommandSpeed.setNumber(kTopIntakeWheelSpeed);
 
-    m_FeederStop = new DigitalInput(9);
+    //m_FeederStop = new DigitalInput(9);
     
     }
 
@@ -48,11 +47,9 @@ public class Intake extends SubsystemBase {
         return this.runEnd(
             // When the command is initialized, set the wheels to the intake speed values
             () -> {
-             if(!m_FeederStop.get()){
               setTopIntakeWheel(kTopIntakeWheelSpeed);
               setBottomIntakeWheel(kBottomIntakeWheelSpeed);
-             }
-            },
+             },
             // When the command stops, stop the wheels
             () -> {
               stop();

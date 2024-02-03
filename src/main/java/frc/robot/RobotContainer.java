@@ -14,6 +14,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -28,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Launcher;
+
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Feeder;
 
@@ -39,11 +41,15 @@ import frc.robot.subsystems.Feeder;
  */
 public class RobotContainer {
   // The robot's subsystems
+
+   DigitalInput m_FeederStop = new DigitalInput(9);
+  
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
   private final Launcher m_Launcher = new Launcher();
   private final Intake m_Intake = new Intake();
-  private final Feeder m_Feeder = new Feeder();
+  private final Feeder m_Feeder = new Feeder(m_FeederStop);
+ 
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -53,6 +59,8 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    
+    
     // Configure the button bindings
     configureButtonBindings();
 
@@ -86,9 +94,9 @@ public class RobotContainer {
     
     m_operatorController.y().whileTrue(m_Launcher.getLaunchSpeakerCommand());
     m_operatorController.a().whileTrue(m_Launcher.getLaunchAmpCommand());
-    m_operatorController.rightTrigger().whileTrue(m_Feeder.getFeederWheelCommand(false));
+    m_operatorController.rightTrigger().whileTrue(m_Feeder.getFeederWheelCommand());
     m_operatorController.leftTrigger().whileTrue(m_Feeder.getReverseFeederCommand());
-    m_operatorController.b().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelCommand(true)));
+    m_operatorController.b().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelCommand()).until(m_FeederStop::get));
   }
 
   /**
@@ -132,7 +140,7 @@ public class RobotContainer {
 
     // Reset odometry to the starting pose of the trajectory.
     m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
-
+    //m_operatorController.getHID().setRumble(null, 0);
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
   }

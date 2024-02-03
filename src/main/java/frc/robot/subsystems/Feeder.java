@@ -6,8 +6,7 @@ import static frc.robot.Constants.LauncherConstants.*;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.Intake;
+
     
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -22,7 +21,7 @@ public class Feeder extends SubsystemBase {
 
     //Intake m_Intake;    
     
-    public Feeder(){
+    public Feeder(DigitalInput feederStop){
     m_FeederWheel = new CANSparkMax(kFeederWheelID, MotorType.kBrushless);
 
     m_FeederWheelSpeed = new SmartdashboardItem("FeederWheelSpeed");
@@ -33,27 +32,27 @@ public class Feeder extends SubsystemBase {
     
     m_FeederWheelCommandSpeed.setNumber(kFeederWheelSpeed);
 
-    m_FeederStop = new DigitalInput(9);
+    //m_FeederStop = feederStop;
     // new Trigger(m_FeederStop::get).onTrue(stopFeeder());
 
-   m_FeederLimitSwitch = new SmartdashboardItem("FeederLimitSwitch");
+   //m_FeederLimitSwitch = new SmartdashboardItem("FeederLimitSwitch");
     
    //m_Intake = new Intake();
     }
 
-      public Command getFeederWheelCommand(boolean isIntake){
+      public Command getFeederWheelCommand(){
 
         return this.runEnd(
             // When the command is initialized, set the wheels to the intake speed values
             () -> {
               
-                if(isIntake && m_FeederStop.get()){
+                /* if(isIntake && m_FeederStop.get()){
                   setFeederWheel(0);
                   //m_Intake.setBottomIntakeWheel(0);
                   //m_Intake.setTopIntakeWheel(0);
-                }else{
+                }else{ */
                   setFeederWheel(kFeederWheelSpeed);
-                }
+                //}
             },
             // When the command stops, stop the wheels
             () -> {
@@ -99,13 +98,13 @@ public class Feeder extends SubsystemBase {
 @Override
 public void periodic(){
   //return m_FeederStop.get();
-  m_FeederLimitSwitch.setBoolean(m_FeederStop.get());
+  //m_FeederLimitSwitch.setBoolean(m_FeederStop.get());
 }
 
- public Boolean FeederLimitSwitch() {
-    return m_FeederStop.get();
+// public Boolean FeederLimitSwitch() {
+    //return m_FeederStop.get();
   
-}
+//}
 
 
 }
