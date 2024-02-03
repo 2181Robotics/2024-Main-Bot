@@ -163,8 +163,20 @@ public final class Constants {
     public static final double kBottomLaunchWheelSpeakerSpeed = 1;
     public static final double kTopLaunchWheelSpeakerSpeed = 1;
    
-
     public static final double kLauncherDelay = 0;
+
+    public static final int bottomLaunchWheelSecondaryCurrentLimit = 40;
+    public static final int topLaunchWheelSecondaryCurrentLimit = 40;
+    
+    public static final double launchP = 6.0e-5;
+    public static final double launchI = 0.750e-6;
+    public static final double launchD = 0;
+    public static final double launchFF = 0.000015;
+
+    public static final int speakerShootVelocity = 4000;  
+    public static final int ampShootTopWheelVelocity = 970;
+    public static final int ampShootBottomWheelVelocity = 1360;
+
   }
 
 

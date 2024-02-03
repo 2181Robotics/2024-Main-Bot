@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 public class Launcher extends SubsystemBase {
   CANSparkMax m_BottomLaunchWheel;
@@ -21,21 +24,47 @@ public class Launcher extends SubsystemBase {
 
   CANSparkMax kBottomLaunchWheel;
   CANSparkMax kTopLaunchWheel;
-  
+
+  private SparkPIDController bottomPID;
+  private SparkPIDController topPID;  
 
   /** Creates a new Launcher. */
   public Launcher() {
     m_BottomLaunchWheel = new CANSparkMax(kBottomLaunchWheelID,MotorType.kBrushless);
-    m_TopLaunchWheel = new CANSparkMax(kTopLaunchWheelID, MotorType.kBrushless);
+    m_BottomLaunchWheel.setSmartCurrentLimit(kBottomLaunchWheelCurrentLimit);
+    m_BottomLaunchWheel.setSecondaryCurrentLimit(bottomLaunchWheelSecondaryCurrentLimit);
+    m_BottomLaunchWheel.restoreFactoryDefaults();
+    m_BottomLaunchWheel.setInverted(false);
+    m_BottomLaunchWheel.setIdleMode(IdleMode.kCoast);
+    bottomPID = m_BottomLaunchWheel.getPIDController();
 
-    // m_BottomLauchWheelSpeed = new SmartdashboardItem("BottomLaunchWheelSpeed");
-    // m_TopLaunchWheelSpeed = new SmartdashboardItem("TopLaunchWheelSpeed");
+    m_TopLaunchWheel = new CANSparkMax(kTopLaunchWheelID, MotorType.kBrushless);
+    m_TopLaunchWheel.setSmartCurrentLimit(kTopLaunchWheelCurrentLimit);
+    m_TopLaunchWheel.setSecondaryCurrentLimit(bottomLaunchWheelSecondaryCurrentLimit);
+    m_TopLaunchWheel.restoreFactoryDefaults();
+    m_TopLaunchWheel.setInverted(false);
+    m_TopLaunchWheel.setIdleMode(IdleMode.kCoast);
+    topPID = m_TopLaunchWheel.getPIDController();
+
+    bottomPID.setP(launchP);
+    bottomPID.setI(launchI);
+    bottomPID.setD(launchD);
+    bottomPID.setFF(launchFF);
+    bottomPID.setOutputRange(0.0, 1.0);
+    m_BottomLaunchWheel.burnFlash();
+
+    topPID.setP(launchP);
+    topPID.setI(launchI);
+    topPID.setD(launchD);
+    topPID.setFF(launchFF);
+    topPID.setOutputRange(0.0, 1.0);
+    m_TopLaunchWheel.burnFlash();
+
+    m_BottomLauchWheelSpeed = new SmartdashboardItem("BottomLaunchWheelSpeed");
+    m_TopLaunchWheelSpeed = new SmartdashboardItem("TopLaunchWheelSpeed");
 
     m_TopLaunchWheelCommandSpeed = new SmartdashboardItem("TopLaunchWheelCommandSpeed");
     m_BottomLaunchWheelCommandSpeed = new SmartdashboardItem("BottomLaunchCommandSpeed");
-
-    m_BottomLaunchWheel.setSmartCurrentLimit(kBottomLaunchWheelCurrentLimit);
-    m_TopLaunchWheel.setSmartCurrentLimit(kTopLaunchWheelCurrentLimit);
 
     // m_BottomLaunchWheelCommandSpeed.setNumber(kBottomLaunchWheelSpeakerSpeed);
     // m_TopLaunchWheelCommandSpeed.setNumber(kTopLaunchWheelSpeakerSpeed);
@@ -54,13 +83,13 @@ public class Launcher extends SubsystemBase {
     return this.startEnd(
         // When the command is initialized, set the wheels to the intake speed values
         () -> {
-          setTopLaunchWheel(kTopLaunchWheelSpeakerSpeed);
-          setBottomLaunchWheel(kBottomLaunchWheelSpeakerSpeed);
+          bottomPID.setReference(speakerShootVelocity, ControlType.kVelocity);
+          topPID.setReference(speakerShootVelocity, ControlType.kVelocity);
         },
         // When the command stops, stop the wheels
         () -> {
-          setTopLaunchWheel(0);
-          setBottomLaunchWheel(0);
+          bottomPID.setReference(0, ControlType.kVelocity);
+          topPID.setReference(0, ControlType.kVelocity);
         });
   }
 
@@ -82,13 +111,13 @@ public class Launcher extends SubsystemBase {
     return this.startEnd(
         // When the command is initialized, set the wheels to the intake speed values
         () -> {
-          setTopLaunchAmpWheel(kTopLaunchWheelAmpSpeed);
-          setBottomLaunchAmpWheel(kBottomLaunchWheelAmpSpeed);
+          bottomPID.setReference(ampShootBottomWheelVelocity, ControlType.kVelocity);
+          topPID.setReference(ampShootTopWheelVelocity, ControlType.kVelocity);
         },
         // When the command stops, stop the wheels
         () -> {
-          setTopLaunchWheel(0);
-          setBottomLaunchWheel(0);
+          bottomPID.setReference(0, ControlType.kVelocity);
+          topPID.setReference(0, ControlType.kVelocity);
         });
   }
 
@@ -108,5 +137,10 @@ public class Launcher extends SubsystemBase {
   public void getEncoders() {
     m_BottomLauchWheelSpeed.setNumber(m_BottomLaunchWheel.getEncoder().getVelocity());
     m_TopLaunchWheelSpeed.setNumber(m_TopLaunchWheel.getEncoder().getVelocity());
+  }
+
+  @Override
+  public void periodic() {
+      getEncoders();
   }
 }
