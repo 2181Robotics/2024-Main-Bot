@@ -28,8 +28,8 @@ public class Launcher extends SubsystemBase {
     m_BottomLaunchWheel = new CANSparkMax(kBottomLaunchWheelID,MotorType.kBrushless);
     m_TopLaunchWheel = new CANSparkMax(kTopLaunchWheelID, MotorType.kBrushless);
 
-    // m_BottomLauchWheelSpeed = new SmartdashboardItem("BottomLaunchWheelSpeed");
-    // m_TopLaunchWheelSpeed = new SmartdashboardItem("TopLaunchWheelSpeed");
+    m_BottomLauchWheelSpeed = new SmartdashboardItem("BottomLaunchWheelSpeed");
+    m_TopLaunchWheelSpeed = new SmartdashboardItem("TopLaunchWheelSpeed");
 
     m_TopLaunchWheelCommandSpeed = new SmartdashboardItem("TopLaunchWheelCommandSpeed");
     m_BottomLaunchWheelCommandSpeed = new SmartdashboardItem("BottomLaunchCommandSpeed");
@@ -108,6 +108,11 @@ public class Launcher extends SubsystemBase {
   public void getEncoders() {
     m_BottomLauchWheelSpeed.setNumber(m_BottomLaunchWheel.getEncoder().getVelocity());
     m_TopLaunchWheelSpeed.setNumber(m_TopLaunchWheel.getEncoder().getVelocity());
+  }
+
+  @Override
+  public void periodic() {
+      getEncoders();
   }
 }
 
