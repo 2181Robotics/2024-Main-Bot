@@ -99,6 +99,22 @@ public class Launcher extends SubsystemBase {
         });
   }
 
+    public Command setLaunchZero() {
+    // The startEnd helper method takes a method to call when the command is initialized and one to
+    // call when it ends
+    return this.runEnd(
+        // When the command is initialized, set the wheels to the intake speed values
+        () -> {
+          setBottomLaunchWheel(0);
+          setTopLaunchWheel(0);
+        },
+        // When the command stops, stop the wheels
+        () -> {
+          setBottomLaunchWheel(0);
+          setTopLaunchWheel(0);
+        });
+  }
+
   // An accessor method to set the speed (technically the output percentage) of the launch wheel
   public void setBottomLaunchWheel(double speed) {
     m_BottomLaunchWheel.set(speed);

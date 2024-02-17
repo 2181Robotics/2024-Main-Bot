@@ -157,7 +157,7 @@ public final class Constants {
     public static final double kBottomLaunchWheelAmpSpeed = .37;
     public static final double kTopLaunchWheelAmpSpeed = .22;
  
-    public static final double kFeederWheelSpeed = .5;
+    public static final double kFeederWheelLaunchSpeed = .5;
    
 
     public static final double kBottomLaunchWheelSpeakerSpeed = 1;
@@ -194,6 +194,8 @@ public final class Constants {
     //Sets the speed for the intake wheels
     public static final double kTopIntakeWheelSpeed = -.35;
     public static final double kBottomIntakeWheelSpeed = .40;
+
+    public static final double kFeederWheelIntakeSpeed = .4;
 
   }
 

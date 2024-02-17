@@ -9,6 +9,7 @@ package frc.robot;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
+import com.fasterxml.jackson.databind.util.Named;
 
 //PathPlanner 
 
@@ -22,6 +23,8 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 //Default Needed for Swerve
 
@@ -74,7 +77,7 @@ public class RobotContainer {
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
   // Establishing the Auto Chooser that will appear on the SmartDashboard
 
-  private final LoggedDashboardChooser<Command> autoChooser;
+  private final SendableChooser<Command> autoChooser;
 
 
   DigitalInput m_FeederStop;
@@ -90,17 +93,19 @@ public class RobotContainer {
     // Add all actions to PathPlanner
     NamedCommands.registerCommand("Amp Shoot", m_Launcher.getLaunchSpeakerCommand());
     NamedCommands.registerCommand("Speaker Shoot", m_Launcher.getLaunchSpeakerCommand());
-    NamedCommands.registerCommand("Intake", m_Intake.getIntakeCommand());
-    NamedCommands.registerCommand("Feeder", m_Feeder.getFeederWheelCommand());
+    NamedCommands.registerCommand("Intake", m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand().until(m_FeederStop::get)));
+    NamedCommands.registerCommand("Feeder", m_Feeder.getFeederWheelLaunchCommand());
+    NamedCommands.registerCommand("Launch Stop", m_Launcher.setLaunchZero());
+    NamedCommands.registerCommand("Intake Stop", m_Intake.setIntakeZero());
+    NamedCommands.registerCommand("Feeder Stop", m_Feeder.setFeederZero());
     
     // *** This is currently just printing a message to indicate that the command was
     //     executed, we will need to actually import the commands
    
    
-   
-autoChooser = new LoggedDashboardChooser<>("AutoChooser",
-  AutoBuilder.buildAutoChooser());
+      autoChooser = AutoBuilder.buildAutoChooser();
 
+      SmartDashboard.putData("Auto Chooser", autoChooser); 
 
 
 
@@ -147,11 +152,11 @@ autoChooser = new LoggedDashboardChooser<>("AutoChooser",
 
             m_operatorController.y().whileTrue(m_Launcher.getLaunchSpeakerCommand());
             m_operatorController.a().whileTrue(m_Launcher.getLaunchAmpCommand().alongWith());
-            m_operatorController.rightTrigger().whileTrue(m_Feeder.getFeederWheelCommand());
+            m_operatorController.rightTrigger().whileTrue(m_Feeder.getFeederWheelLaunchCommand());
             m_operatorController.leftTrigger().whileTrue(m_Feeder.getReverseFeederCommand());
             //m_operatorController.b().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelCommand(true)));
             
-            m_operatorController.b().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelCommand()).until(m_FeederStop::get).andThen(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1)))); 
+            m_operatorController.b().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand()).until(m_FeederStop::get).andThen(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1)))); 
             m_operatorController.b().onFalse(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0))); 
   
                     // *******************************
@@ -218,6 +223,6 @@ autoChooser = new LoggedDashboardChooser<>("AutoChooser",
    
   public Command getAutonomousCommand() {
     
-    return autoChooser.get();
+    return autoChooser.getSelected();
     }
 }

@@ -60,6 +60,23 @@ public class Intake extends SubsystemBase {
               stop();
             });
       }
+
+      public Command setIntakeZero() {
+        // The startEnd helper method takes a method to call when the command is initialized and one to
+        // call when it ends
+        return this.runEnd(
+            // When the command is initialized, set the wheels to the intake speed values
+            () -> {
+             //if(!m_FeederStop.get()){
+              setTopIntakeWheel(0);
+              setBottomIntakeWheel(0);
+             
+            },
+            // When the command stops, stop the wheels
+            () -> {
+              stop();
+            });
+      }
     
       //Sets intake wheels to proper speeds
       public void setTopIntakeWheel(double speed){
