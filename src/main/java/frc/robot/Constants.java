@@ -173,7 +173,7 @@ public final class Constants {
     public static final double launchD = 0;
     public static final double launchFF = 0.000015;
 
-    public static final double speakerShootVelocity = 6000;  
+    public static final double speakerShootVelocity = 8000;  
     public static final double ampShootTopWheelVelocity = 970;
     public static final double ampShootBottomWheelVelocity = 1360;
 

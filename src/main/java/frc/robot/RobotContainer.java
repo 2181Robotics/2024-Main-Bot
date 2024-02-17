@@ -21,7 +21,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 //Imports for Controllers
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 
 //Default Needed for Swerve
@@ -32,7 +31,6 @@ import edu.wpi.first.math.MathUtil;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -41,9 +39,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 // Import all subsystems for the robot
 
 import frc.robot.subsystems.Launcher;
+import frc.robot.subsystems.LeftClimberArm;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.RightClimberArm;
 
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -64,7 +63,8 @@ public class RobotContainer {
   private final Launcher m_Launcher = new Launcher();
   private final Intake m_Intake = new Intake();
   private final Feeder m_Feeder = new Feeder();
-  private final Climber m_Climber = new Climber();
+  private final RightClimberArm m_RightClimberArm = new RightClimberArm();
+  private final LeftClimberArm m_LeftClimberArm = new LeftClimberArm();
   
 
 
@@ -132,11 +132,11 @@ public class RobotContainer {
     //         m_robotDrive));
 
             m_driveCommandController.a().whileTrue(new RunCommand(() -> m_robotDrive.setX(),m_robotDrive));
-            m_driveCommandController.rightTrigger().whileTrue(m_Climber.getRightClimberArmDownCommand());
-            m_driveCommandController.leftTrigger().whileTrue(m_Climber.getLeftClimberArmDownCommand());
+            m_driveCommandController.rightTrigger().whileTrue(m_RightClimberArm.getRightClimberArmDownCommand());
+            m_driveCommandController.leftTrigger().whileTrue(m_LeftClimberArm.getLeftClimberArmDownCommand());
             
-            m_driveCommandController.rightBumper().whileTrue(m_Climber.getRightClimberArmUpCommand());
-            m_driveCommandController.leftBumper().whileTrue(m_Climber.getLeftClimberArmUpCommand());
+            m_driveCommandController.rightBumper().whileTrue(m_RightClimberArm.getRightClimberArmUpCommand());
+            m_driveCommandController.leftBumper().whileTrue(m_LeftClimberArm.getLeftClimberArmUpCommand());
 
 
             m_operatorController.y().whileTrue(m_Launcher.getLaunchSpeakerCommand());

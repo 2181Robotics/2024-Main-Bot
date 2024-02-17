@@ -151,20 +151,20 @@ public class Robot extends LoggedRobot {
    // Logger.recordMetadata("Commit Hash (Full)", BuildConstants.GIT_SHA);
    // Logger.recordMetadata("Build Time", BuildConstants.BUILD_DATE);
 
-    if (isReal()) {
-        // Log to USB & Network Tables
-        Logger.addDataReceiver(new WPILOGWriter("/media/sda1/"));
-        Logger.addDataReceiver(new NT4Publisher());
-    } else {
-        // Replay from log and save to file
-        setUseTiming(false);
-        String logPath = LogFileUtil.findReplayLog();
-        Logger.setReplaySource(new WPILOGReader(logPath));
-        Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
+    // if (isReal()) {
+    //     // Log to USB & Network Tables
+    //     Logger.addDataReceiver(new WPILOGWriter("/media/sda1/"));
+    //     Logger.addDataReceiver(new NT4Publisher());
+    // } else {
+    //     // Replay from log and save to file
+    //     setUseTiming(false);
+    //     String logPath = LogFileUtil.findReplayLog();
+    //     Logger.setReplaySource(new WPILOGReader(logPath));
+    //     Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
 
-    }
-    Logger.registerURCL(URCL.startExternal());
-    Logger.start();
+    // }
+    // Logger.registerURCL(URCL.startExternal());
+    // Logger.start();
 }
 
 }
