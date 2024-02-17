@@ -7,15 +7,17 @@ package frc.robot;
 
 //Packages for advantage kit
 
-import org.littletonrobotics.junction.LogFileUtil;
+//import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
-import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.networktables.NT4Publisher;
-import org.littletonrobotics.junction.wpilog.WPILOGReader;
-import org.littletonrobotics.junction.wpilog.WPILOGWriter;
-import org.littletonrobotics.urcl.URCL;
+//import org.littletonrobotics.junction.Logger;
+//import org.littletonrobotics.junction.networktables.NT4Publisher;
+//import org.littletonrobotics.junction.wpilog.WPILOGReader;
+//import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+//import org.littletonrobotics.urcl.URCL;
 
 import com.pathplanner.lib.pathfinding.Pathfinding;
+
+import edu.wpi.first.cameraserver.CameraServer;
 
 //Base packages
 
@@ -51,6 +53,7 @@ public class Robot extends LoggedRobot {
     initializeLogging();
     Pathfinding.setPathfinder(new LocalADStarAK());
     m_robotContainer = new RobotContainer();
+    CameraServer.startAutomaticCapture();
   }
 
 /**

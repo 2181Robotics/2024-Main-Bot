@@ -74,8 +74,7 @@ public class RobotContainer {
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
   // Establishing the Auto Chooser that will appear on the SmartDashboard
 
-  private final LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardChooser<>("AutoChooser",
-  AutoBuilder.buildAutoChooser());
+  private final LoggedDashboardChooser<Command> autoChooser;
 
 
   DigitalInput m_FeederStop;
@@ -99,6 +98,13 @@ public class RobotContainer {
    
    
    
+autoChooser = new LoggedDashboardChooser<>("AutoChooser",
+  AutoBuilder.buildAutoChooser());
+
+
+
+
+
     // Configure the button bindings
     configureButtonBindings();
 
