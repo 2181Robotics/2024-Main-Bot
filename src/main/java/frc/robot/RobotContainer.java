@@ -22,7 +22,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
-
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 
 //Default Needed for Swerve
 
@@ -37,12 +37,13 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
+
 // Import all subsystems for the robot
 
 import frc.robot.subsystems.Launcher;
-
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.Climber;
 
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -63,13 +64,14 @@ public class RobotContainer {
   private final Launcher m_Launcher = new Launcher();
   private final Intake m_Intake = new Intake();
   private final Feeder m_Feeder = new Feeder();
+  private final Climber m_Climber = new Climber();
   
 
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  CommandXboxController m_driveCommandController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
-
   // Establishing the Auto Chooser that will appear on the SmartDashboard
 
   private final LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardChooser<>("AutoChooser",
@@ -87,9 +89,10 @@ public class RobotContainer {
    
 
     // Add all actions to PathPlanner
-    NamedCommands.registerCommand("Action 1", new PrintCommand("Performing Action 1."));
-    NamedCommands.registerCommand("Action 2", new PrintCommand("Performing Action 2."));
-    NamedCommands.registerCommand("Action 3", new PrintCommand("Performing Action 3."));
+    NamedCommands.registerCommand("Amp Shoot", m_Launcher.getLaunchSpeakerCommand());
+    NamedCommands.registerCommand("Speaker Shoot", m_Launcher.getLaunchSpeakerCommand());
+    NamedCommands.registerCommand("Intake", m_Intake.getIntakeCommand());
+    NamedCommands.registerCommand("Feeder", m_Feeder.getFeederWheelCommand());
     
     // *** This is currently just printing a message to indicate that the command was
     //     executed, we will need to actually import the commands
@@ -123,20 +126,27 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kR1.value)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
+    // new JoystickButton(m_driverController, Button.squa)
+    //     .whileTrue(new RunCommand(
+    //         () -> m_robotDrive.setX(),
+    //         m_robotDrive));
+
+            m_driveCommandController.a().whileTrue(new RunCommand(() -> m_robotDrive.setX(),m_robotDrive));
+            m_driveCommandController.rightTrigger().whileTrue(m_Climber.getRightClimberArmDownCommand());
+            m_driveCommandController.leftTrigger().whileTrue(m_Climber.getLeftClimberArmDownCommand());
+            
+            m_driveCommandController.rightBumper().whileTrue(m_Climber.getRightClimberArmUpCommand());
+            m_driveCommandController.leftBumper().whileTrue(m_Climber.getLeftClimberArmUpCommand());
+
 
             m_operatorController.y().whileTrue(m_Launcher.getLaunchSpeakerCommand());
-            m_operatorController.a().whileTrue(m_Launcher.getLaunchAmpCommand());
+            m_operatorController.a().whileTrue(m_Launcher.getLaunchAmpCommand().alongWith());
             m_operatorController.rightTrigger().whileTrue(m_Feeder.getFeederWheelCommand());
             m_operatorController.leftTrigger().whileTrue(m_Feeder.getReverseFeederCommand());
             //m_operatorController.b().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelCommand(true)));
-
-            m_operatorController.b().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelCommand()).until(m_FeederStop::get));
             
-  
+            m_operatorController.b().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelCommand()).until(m_FeederStop::get).andThen(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1)))); 
+            m_operatorController.b().onFalse(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0))); 
   
                     // *******************************
                         // Path Plan to pose, then follow path

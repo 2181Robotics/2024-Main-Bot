@@ -1,14 +1,13 @@
 package frc.robot.subsystems;
 
 
-    import static frc.robot.Constants.IntakeConstants.*;
+import static frc.robot.Constants.IntakeConstants.*;
 
-    import edu.wpi.first.wpilibj2.command.Command;
-    import edu.wpi.first.wpilibj2.command.SubsystemBase;
-    import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-    import com.revrobotics.CANSparkMax;
-    import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class Intake extends SubsystemBase {
     CANSparkMax m_BottomIntakeWheel;
@@ -19,6 +18,8 @@ public class Intake extends SubsystemBase {
 
     SmartdashboardItem m_TopIntakeWheelCommandSpeed;
     SmartdashboardItem m_BottomIntakeWheelCommandSpeed;
+
+
     //DigitalInput m_FeederStop;
    // Feeder m_Feeder;
 
@@ -38,6 +39,7 @@ public class Intake extends SubsystemBase {
     m_BottomIntakeWheelCommandSpeed.setNumber(kBottomIntakeWheelSpeed);
     m_TopIntakeWheelCommandSpeed.setNumber(kTopIntakeWheelSpeed);
 
+    
     //m_FeederStop = new DigitalInput(9);
     
     }
@@ -74,7 +76,7 @@ public class Intake extends SubsystemBase {
         m_TopIntakeWheel.set(0);
       }
 
-      //gets Intake motor Encoders
+      // //gets Intake motor Encoders
       public void getEncoders() {
         m_BottomIntakeWheelSpeed.setNumber(m_BottomIntakeWheel.getEncoder().getVelocity());
         m_TopIntakeWheelSpeed.setNumber(m_TopIntakeWheel.getEncoder().getVelocity());

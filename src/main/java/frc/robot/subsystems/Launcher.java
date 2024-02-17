@@ -2,8 +2,10 @@ package frc.robot.subsystems;
 
 import static frc.robot.Constants.LauncherConstants.*;
 
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -22,11 +24,13 @@ public class Launcher extends SubsystemBase {
   SmartdashboardItem m_TopLaunchWheelCommandSpeed;
   SmartdashboardItem m_BottomLaunchWheelCommandSpeed;
 
-  CANSparkMax kBottomLaunchWheel;
-  CANSparkMax kTopLaunchWheel;
+  // CANSparkMax kBottomLaunchWheel;
+  // CANSparkMax kTopLaunchWheel;
 
   private SparkPIDController bottomPID;
   private SparkPIDController topPID;  
+
+  CommandXboxController m_controller;
 
   /** Creates a new Launcher. */
   public Launcher() {
@@ -68,6 +72,8 @@ public class Launcher extends SubsystemBase {
 
     // m_BottomLaunchWheelCommandSpeed.setNumber(kBottomLaunchWheelSpeakerSpeed);
     // m_TopLaunchWheelCommandSpeed.setNumber(kTopLaunchWheelSpeakerSpeed);
+
+     m_controller = new CommandXboxController(1);
   }
 
   /**
@@ -80,7 +86,7 @@ public class Launcher extends SubsystemBase {
   public Command getLaunchSpeakerCommand() {
     // The startEnd helper method takes a method to call when the command is initialized and one to
     // call when it ends
-    return this.startEnd(
+    return this.runEnd(
         // When the command is initialized, set the wheels to the intake speed values
         () -> {
           bottomPID.setReference(speakerShootVelocity, ControlType.kVelocity);
@@ -88,8 +94,8 @@ public class Launcher extends SubsystemBase {
         },
         // When the command stops, stop the wheels
         () -> {
-          bottomPID.setReference(0, ControlType.kVelocity);
-          topPID.setReference(0, ControlType.kVelocity);
+          setBottomLaunchWheel(0);
+          setTopLaunchWheel(0);
         });
   }
 
@@ -116,8 +122,8 @@ public class Launcher extends SubsystemBase {
         },
         // When the command stops, stop the wheels
         () -> {
-          bottomPID.setReference(0, ControlType.kVelocity);
-          topPID.setReference(0, ControlType.kVelocity);
+          setBottomLaunchAmpWheel(0);
+          setTopLaunchAmpWheel(0);
         });
   }
 
@@ -138,6 +144,23 @@ public class Launcher extends SubsystemBase {
     m_BottomLauchWheelSpeed.setNumber(m_BottomLaunchWheel.getEncoder().getVelocity());
     m_TopLaunchWheelSpeed.setNumber(m_TopLaunchWheel.getEncoder().getVelocity());
   }
+
+// public Command laucherRumble(){
+//   double speedBottom = ampShootBottomWheelVelocity;
+//   double speedTop =  ampShootTopWheelVelocity;
+//   return this.runEnd(
+//   () -> {  
+//     if (((m_TopLaunchWheel.getEncoder().getVelocity() > speedTop-100) && (m_TopLaunchWheel.getEncoder().getVelocity() < speedTop+100)) && ((m_BottomLaunchWheel.getEncoder().getVelocity() > speedBottom-100) && (m_BottomLaunchWheel.getEncoder().getVelocity() < speedBottom+100))){
+//         m_controller.getHID().setRumble(RumbleType.kBothRumble, 1);
+//     }else{
+//        m_controller.getHID().setRumble(RumbleType.kBothRumble, 0);
+//     }
+//   },
+ 
+//   () -> {
+//     m_controller.getHID().setRumble(RumbleType.kBothRumble, 0);
+//   });
+// }
 
   @Override
   public void periodic() {

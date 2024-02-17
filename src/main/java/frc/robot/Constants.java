@@ -173,9 +173,10 @@ public final class Constants {
     public static final double launchD = 0;
     public static final double launchFF = 0.000015;
 
-    public static final int speakerShootVelocity = 4000;  
-    public static final int ampShootTopWheelVelocity = 970;
-    public static final int ampShootBottomWheelVelocity = 1360;
+    public static final double speakerShootVelocity = 6000;  
+    public static final double ampShootTopWheelVelocity = 970;
+    public static final double ampShootBottomWheelVelocity = 1360;
+
 
   }
 
@@ -191,9 +192,23 @@ public final class Constants {
     public static final int kBottomIntakeWheelCurrentLimit = 80;
 
     //Sets the speed for the intake wheels
-    public static final double kTopIntakeWheelSpeed = -.25;
-    public static final double kBottomIntakeWheelSpeed = .25;
+    public static final double kTopIntakeWheelSpeed = -.35;
+    public static final double kBottomIntakeWheelSpeed = .40;
 
+  }
+
+  public static class ClimberConstants{
+    // Climber Motor ID numbers
+    public static final int kLeftClimberArmID = 15;
+    public static final int kRightClimberArmID = 16;
+
+    //Sets current limit for Climber arms
+    public static final int kLeftClimberArmCurrentLimit = 80;
+    public static final int kRightClimberArmCurrentLimit = 80;
+
+    //Sets the speed for the Climber arms
+    public static final double kLeftClimberArmSpeed = .25;
+    public static final double kRightClimberArmSpeed = .25;
   }
 
 
