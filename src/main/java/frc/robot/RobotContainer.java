@@ -91,16 +91,14 @@ public class RobotContainer {
    
 
     // Add all actions to PathPlanner
-    NamedCommands.registerCommand("Amp Shoot", m_Launcher.getLaunchSpeakerCommand());
-    NamedCommands.registerCommand("Speaker Shoot", m_Launcher.getLaunchSpeakerCommand());
-    NamedCommands.registerCommand("Intake", m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand().until(m_FeederStop::get)));
-    NamedCommands.registerCommand("Feeder", m_Feeder.getFeederWheelLaunchCommand());
-    NamedCommands.registerCommand("Launch Stop", m_Launcher.setLaunchZero());
-    NamedCommands.registerCommand("Intake Stop", m_Intake.setIntakeZero());
-    NamedCommands.registerCommand("Feeder Stop", m_Feeder.setFeederZero());
-    
-    // *** This is currently just printing a message to indicate that the command was
-    //     executed, we will need to actually import the commands
+    NamedCommands.registerCommand("Amp Shoot", m_Launcher.getLaunchSpeakerCommand().withTimeout(1.5));
+    NamedCommands.registerCommand("Speaker Shoot", m_Launcher.getLaunchSpeakerCommand().withTimeout(3));
+    NamedCommands.registerCommand("Intake", m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand().until(m_FeederStop::get)).withTimeout(2.5));
+    NamedCommands.registerCommand("Feeder", m_Feeder.getFeederWheelLaunchCommand().withTimeout(0.5));
+    NamedCommands.registerCommand("Launch Stop", m_Launcher.setLaunchZero().withTimeout(.1));
+    NamedCommands.registerCommand("Intake Stop", m_Intake.setIntakeZero().withTimeout(.1));
+    NamedCommands.registerCommand("Feeder Stop", m_Feeder.setFeederZero().withTimeout(.1));
+
    
    
       autoChooser = AutoBuilder.buildAutoChooser();
