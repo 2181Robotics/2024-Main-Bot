@@ -25,13 +25,14 @@ import com.pathplanner.lib.util.ReplanningConfig;
 //Base libraries
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 //import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+//import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 //import edu.wpi.first.math.util.Units;
@@ -77,14 +78,14 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
 
-  private SmartdashboardItem SDAngle = new SmartdashboardItem("Pigeon Angle");
+ // private SmartdashboardItem SDAngle = new SmartdashboardItem("Pigeon Angle");
   // private SmartdashboardItem SDFrontLeftPos = new SmartdashboardItem("Front Left Position");
   // private SmartdashboardItem SDFrontRightPos = new SmartdashboardItem("Front Right Position");
   // private SmartdashboardItem SDRearRightPos = new SmartdashboardItem("Rear Right Position");
   // private SmartdashboardItem SDRearLeftPos = new SmartdashboardItem("Rear Left Position");
-  private SmartdashboardItem SDXSpeed = new SmartdashboardItem("Commanded X Speed");
-  private SmartdashboardItem SDYSpeed = new SmartdashboardItem("Commanded Y Speed");
-  private SmartdashboardItem SDRotation = new SmartdashboardItem("Commanded Rotation");
+  //private SmartdashboardItem SDXSpeed = new SmartdashboardItem("Commanded X Speed");
+  //private SmartdashboardItem SDYSpeed = new SmartdashboardItem("Commanded Y Speed");
+  //private SmartdashboardItem SDRotation = new SmartdashboardItem("Commanded Rotation");
 
 
 
@@ -93,15 +94,11 @@ public class DriveSubsystem extends SubsystemBase {
 
 
   // Odometry class for tracking robot pose
-  SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
+  SwerveDrivePoseEstimator m_odometry = new SwerveDrivePoseEstimator(
       DriveConstants.kDriveKinematics,
       getHeading(),
-      new SwerveModulePosition[] {
-          m_frontLeft.getPosition(),
-          m_frontRight.getPosition(),
-          m_rearLeft.getPosition(),
-          m_rearRight.getPosition()
-      });
+      getModulePositions(),
+      new Pose2d());
 
 
 
@@ -147,12 +144,8 @@ AutoBuilder.configureHolonomic(
     // Update the odometry in the periodic block
     m_odometry.update(
         getHeading(),
-        new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_rearLeft.getPosition(),
-            m_rearRight.getPosition()
-        });
+        getModulePositions()
+                );
 
 
         Logger.recordOutput("Chassis/Actual", new SwerveModuleState[] {
@@ -163,7 +156,7 @@ AutoBuilder.configureHolonomic(
   });
   Logger.recordOutput("Chassis/Pose", getPose());
 
-  SDAngle.setNumber(m_gyro.getAngle());
+  
 
   }
 
@@ -173,7 +166,7 @@ AutoBuilder.configureHolonomic(
    * @return The pose.
    */
   public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
+    return m_odometry.getEstimatedPosition();
   }
 
   /**
@@ -184,12 +177,7 @@ AutoBuilder.configureHolonomic(
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPosition(
         getHeading(),
-        new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_rearLeft.getPosition(),
-            m_rearRight.getPosition()
-        },
+        getModulePositions(),
         pose);
   }
 
@@ -208,10 +196,7 @@ AutoBuilder.configureHolonomic(
     double xSpeedCommanded;
     double ySpeedCommanded;
 
-    SDXSpeed.setNumber(xSpeed);
-    SDYSpeed.setNumber(ySpeed);
-    SDRotation.setNumber(rot);
-
+  
 
     if (rateLimit) {
       // Convert XY to polar for rate limiting
@@ -299,6 +284,20 @@ private SwerveModuleState[] getModuleStates() {
   };
 }
 
+
+private SwerveModulePosition[] getModulePositions(){
+  return new SwerveModulePosition[] {
+      m_frontLeft.getPosition(),
+      m_frontRight.getPosition(),
+      m_rearLeft.getPosition(),
+      m_rearRight.getPosition()
+  };
+}
+
+
+
+
+
   /**
    * Sets the wheels into an X formation to prevent movement.
    */
@@ -344,7 +343,7 @@ private SwerveModuleState[] getModuleStates() {
    *
    * @return The turn rate of the robot, in degrees per second
    */
-  public double getTurnRate() {
-    return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
-  }
+  // public double getTurnRate() {
+  //   return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  // }
 }

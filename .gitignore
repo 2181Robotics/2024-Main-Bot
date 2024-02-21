@@ -179,3 +179,4 @@ ctre_sim/
 
 
 src/main/java/frc/robot/BuildConstants.java
+src/main/deploy/pathplanner/autos/4-Note-Center-Start.auto

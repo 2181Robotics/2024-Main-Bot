@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class RightClimberArm extends SubsystemBase{
@@ -19,6 +20,7 @@ public class RightClimberArm extends SubsystemBase{
         m_RightClimberArmCommandSpeed = new SmartdashboardItem("RightClimberArmCommandSpeed");
         m_RightClimberArm.setSmartCurrentLimit(kRightClimberArmCurrentLimit);
         m_RightClimberArmCommandSpeed.setNumber(kRightClimberArmSpeed);  
+        m_RightClimberArm.setIdleMode(IdleMode.kBrake); 
     }
 
     public Command getRightClimberArmUpCommand() {
