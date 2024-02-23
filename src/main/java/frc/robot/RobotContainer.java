@@ -91,7 +91,9 @@ public class RobotContainer {
     // Add all actions to PathPlanner
     NamedCommands.registerCommand("Amp Shoot", m_Launcher.getLaunchSpeakerCommand().withTimeout(1.5));
     NamedCommands.registerCommand("Speaker Shoot", m_Launcher.getLaunchSpeakerCommand().withTimeout(1.5));
-    NamedCommands.registerCommand("Intake", m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand().until(m_FeederStop::get)).withTimeout(1));
+    NamedCommands.registerCommand("Intake", 
+    m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand().until(m_FeederStop::get)).withTimeout(1));
+    
     NamedCommands.registerCommand("Feeder", m_Feeder.getFeederWheelLaunchCommand().withTimeout(.75));
     NamedCommands.registerCommand("Launch Stop", m_Launcher.setLaunchZero().withTimeout(.1));
     NamedCommands.registerCommand("Intake Stop", m_Intake.setIntakeZero().withTimeout(.1));
