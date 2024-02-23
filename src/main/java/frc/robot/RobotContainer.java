@@ -9,7 +9,6 @@ package frc.robot;
 
 //import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
-//import com.fasterxml.jackson.databind.util.Named;
 
 //PathPlanner 
 
@@ -57,7 +56,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 
-
 public class RobotContainer {
   
   // The robot's subsystems
@@ -68,18 +66,18 @@ public class RobotContainer {
   private final Feeder m_Feeder = new Feeder();
   private final RightClimberArm m_RightClimberArm = new RightClimberArm();
   private final LeftClimberArm m_LeftClimberArm = new LeftClimberArm();
-  
 
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_driveCommandController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
+  
+
   // Establishing the Auto Chooser that will appear on the SmartDashboard
-
   private final SendableChooser<Command> autoChooser;
-
-
+  
+  
   DigitalInput m_FeederStop;
   
   /**
@@ -144,6 +142,7 @@ public class RobotContainer {
             m_driveCommandController.rightTrigger().whileTrue(m_RightClimberArm.getRightClimberArmDownCommand());
             m_driveCommandController.leftTrigger().whileTrue(m_LeftClimberArm.getLeftClimberArmDownCommand());
             
+
             m_driveCommandController.rightBumper().whileTrue(m_RightClimberArm.getRightClimberArmUpCommand());
             m_driveCommandController.leftBumper().whileTrue(m_LeftClimberArm.getLeftClimberArmUpCommand());
 
@@ -152,7 +151,7 @@ public class RobotContainer {
             m_operatorController.a().whileTrue(m_Launcher.getLaunchAmpCommand().alongWith());
             m_operatorController.rightTrigger().whileTrue(m_Feeder.getFeederWheelLaunchCommand());
             m_operatorController.leftTrigger().whileTrue(m_Feeder.getReverseFeederCommand());
-            //m_operatorController.b().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelCommand(true)));
+
             
             m_operatorController.b().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand()).until(m_FeederStop::get).andThen(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1)))); 
             m_operatorController.b().onFalse(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0))); 

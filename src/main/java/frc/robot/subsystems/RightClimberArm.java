@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+
 public class RightClimberArm extends SubsystemBase{
     CANSparkMax m_RightClimberArm;
     SmartdashboardItem m_RightClimberArmSpeed;
@@ -29,7 +30,6 @@ public class RightClimberArm extends SubsystemBase{
         return this.runEnd(
             // When the command is initialized, set the wheels to the intake speed values
             () -> {
-             //if(!m_FeederStop.get()){
               setRightClimberArm(-kRightClimberArmSpeed);
              
             },
@@ -44,7 +44,6 @@ public class RightClimberArm extends SubsystemBase{
         return this.runEnd(
             // When the command is initialized, set the wheels to the intake speed values
             () -> {
-             //if(!m_FeederStop.get()){
               setRightClimberArm(kRightClimberArmSpeed);
              
             },

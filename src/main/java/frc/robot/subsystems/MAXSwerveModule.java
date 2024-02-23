@@ -164,7 +164,5 @@ public class MAXSwerveModule {
 
     m_desiredState = desiredState;
   
-
-
   }
 }

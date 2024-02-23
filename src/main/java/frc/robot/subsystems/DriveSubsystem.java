@@ -14,7 +14,7 @@ import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 
-//These are the libraries needed for PathPlanner and robot sim stuff, urls for libraries included by the imports
+//These are the libraries needed for PathPlanner
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -26,16 +26,13 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-//import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-//import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-//import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
@@ -78,22 +75,18 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
 
- // private SmartdashboardItem SDAngle = new SmartdashboardItem("Pigeon Angle");
-  // private SmartdashboardItem SDFrontLeftPos = new SmartdashboardItem("Front Left Position");
-  // private SmartdashboardItem SDFrontRightPos = new SmartdashboardItem("Front Right Position");
-  // private SmartdashboardItem SDRearRightPos = new SmartdashboardItem("Rear Right Position");
-  // private SmartdashboardItem SDRearLeftPos = new SmartdashboardItem("Rear Left Position");
-  //private SmartdashboardItem SDXSpeed = new SmartdashboardItem("Commanded X Speed");
-  //private SmartdashboardItem SDYSpeed = new SmartdashboardItem("Commanded Y Speed");
-  //private SmartdashboardItem SDRotation = new SmartdashboardItem("Commanded Rotation");
+ //private SmartdashboardItem SDAngle = new SmartdashboardItem("Pigeon Angle");
+ //private SmartdashboardItem SDFrontLeftPos = new SmartdashboardItem("Front Left Position");
+ //private SmartdashboardItem SDFrontRightPos = new SmartdashboardItem("Front Right Position");
+ //private SmartdashboardItem SDRearRightPos = new SmartdashboardItem("Rear Right Position");
+ //private SmartdashboardItem SDRearLeftPos = new SmartdashboardItem("Rear Left Position");
+ //private SmartdashboardItem SDXSpeed = new SmartdashboardItem("Commanded X Speed");
+ //private SmartdashboardItem SDYSpeed = new SmartdashboardItem("Commanded Y Speed");
+ //private SmartdashboardItem SDRotation = new SmartdashboardItem("Commanded Rotation");
 
 
 
-
-
-
-
-  // Odometry class for tracking robot pose
+// Odometry class for tracking robot pose
   SwerveDrivePoseEstimator m_odometry = new SwerveDrivePoseEstimator(
       DriveConstants.kDriveKinematics,
       getHeading(),
@@ -101,9 +94,9 @@ public class DriveSubsystem extends SubsystemBase {
       new Pose2d());
 
 
-
-  /** Creates a new DriveSubsystem. */
+/** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+
 
 // Configure the AutoBuilder last
 AutoBuilder.configureHolonomic(
@@ -136,8 +129,8 @@ AutoBuilder.configureHolonomic(
   this // Reference to this subsystem to set requirements
 );
 
-
   }
+
 
   @Override
   public void periodic() {
@@ -156,9 +149,8 @@ AutoBuilder.configureHolonomic(
   });
   Logger.recordOutput("Chassis/Pose", getPose());
 
-  
-
   }
+
 
   /**
    * Returns the currently-estimated pose of the robot.
@@ -168,6 +160,7 @@ AutoBuilder.configureHolonomic(
   public Pose2d getPose() {
     return m_odometry.getEstimatedPosition();
   }
+
 
   /**
    * Resets the odometry to the specified pose.
@@ -180,6 +173,7 @@ AutoBuilder.configureHolonomic(
         getModulePositions(),
         pose);
   }
+
 
   /**
    * Method to drive the robot using joystick info.
@@ -196,7 +190,6 @@ AutoBuilder.configureHolonomic(
     double xSpeedCommanded;
     double ySpeedCommanded;
 
-  
 
     if (rateLimit) {
       // Convert XY to polar for rate limiting
@@ -273,8 +266,6 @@ private ChassisSpeeds getRobotRelativeSpeeds() {
 }
 
 
-
-
 private SwerveModuleState[] getModuleStates() {
   return new SwerveModuleState[] {
           m_frontLeft.getState(),
@@ -293,9 +284,6 @@ private SwerveModulePosition[] getModulePositions(){
       m_rearRight.getPosition()
   };
 }
-
-
-
 
 
   /**
@@ -324,9 +312,6 @@ private SwerveModulePosition[] getModulePositions(){
     Logger.recordOutput("Chassis/Target", desiredStates);
 }
 
-
-
-
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
     m_gyro.reset();
@@ -341,12 +326,5 @@ private SwerveModulePosition[] getModulePositions(){
     return Rotation2d.fromDegrees(m_gyro.getAngle() * (DriveConstants.kGyroReversed ? -1.0 : 1.0));
   }
 
-  /**
-   * Returns the turn rate of the robot.
-   *
-   * @return The turn rate of the robot, in degrees per second
-   */
-  // public double getTurnRate() {
-  //   return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
-  // }
+
 }

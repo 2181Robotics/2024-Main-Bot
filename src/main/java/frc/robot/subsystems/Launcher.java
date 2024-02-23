@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import static frc.robot.Constants.LauncherConstants.*;
 
-//import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -13,6 +12,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
+
 
 public class Launcher extends SubsystemBase {
   CANSparkMax m_BottomLaunchWheel;
@@ -34,6 +34,8 @@ public class Launcher extends SubsystemBase {
 
   /** Creates a new Launcher. */
   public Launcher() {
+    
+    //Motor controller settings
     m_BottomLaunchWheel = new CANSparkMax(kBottomLaunchWheelID,MotorType.kBrushless);
     m_BottomLaunchWheel.setSmartCurrentLimit(kBottomLaunchWheelCurrentLimit);
     m_BottomLaunchWheel.setSecondaryCurrentLimit(bottomLaunchWheelSecondaryCurrentLimit);
@@ -41,6 +43,14 @@ public class Launcher extends SubsystemBase {
     m_BottomLaunchWheel.setInverted(false);
     m_BottomLaunchWheel.setIdleMode(IdleMode.kCoast);
     bottomPID = m_BottomLaunchWheel.getPIDController();
+
+    bottomPID.setP(launchP);
+    bottomPID.setI(launchI);
+    bottomPID.setD(launchD);
+    bottomPID.setFF(launchFF);
+    bottomPID.setOutputRange(0.0, 1.0);
+    m_BottomLaunchWheel.burnFlash();
+
 
     m_TopLaunchWheel = new CANSparkMax(kTopLaunchWheelID, MotorType.kBrushless);
     m_TopLaunchWheel.setSmartCurrentLimit(kTopLaunchWheelCurrentLimit);
@@ -50,12 +60,6 @@ public class Launcher extends SubsystemBase {
     m_TopLaunchWheel.setIdleMode(IdleMode.kCoast);
     topPID = m_TopLaunchWheel.getPIDController();
 
-    bottomPID.setP(launchP);
-    bottomPID.setI(launchI);
-    bottomPID.setD(launchD);
-    bottomPID.setFF(launchFF);
-    bottomPID.setOutputRange(0.0, 1.0);
-    m_BottomLaunchWheel.burnFlash();
 
     topPID.setP(launchP);
     topPID.setI(launchI);
@@ -64,14 +68,13 @@ public class Launcher extends SubsystemBase {
     topPID.setOutputRange(0.0, 1.0);
     m_TopLaunchWheel.burnFlash();
 
+
     m_BottomLauchWheelSpeed = new SmartdashboardItem("BottomLaunchWheelSpeed");
     m_TopLaunchWheelSpeed = new SmartdashboardItem("TopLaunchWheelSpeed");
 
     m_TopLaunchWheelCommandSpeed = new SmartdashboardItem("TopLaunchWheelCommandSpeed");
     m_BottomLaunchWheelCommandSpeed = new SmartdashboardItem("BottomLaunchCommandSpeed");
 
-    // m_BottomLaunchWheelCommandSpeed.setNumber(kBottomLaunchWheelSpeakerSpeed);
-    // m_TopLaunchWheelCommandSpeed.setNumber(kTopLaunchWheelSpeakerSpeed);
 
      m_controller = new CommandXboxController(1);
   }
@@ -126,7 +129,6 @@ public class Launcher extends SubsystemBase {
   }
 
 
-
     public Command getLaunchAmpCommand() {
     // The startEnd helper method takes a method to call when the command is initialized and one to
     // call when it ends
@@ -161,22 +163,6 @@ public class Launcher extends SubsystemBase {
     m_TopLaunchWheelSpeed.setNumber(m_TopLaunchWheel.getEncoder().getVelocity());
   }
 
-// public Command laucherRumble(){
-//   double speedBottom = ampShootBottomWheelVelocity;
-//   double speedTop =  ampShootTopWheelVelocity;
-//   return this.runEnd(
-//   () -> {  
-//     if (((m_TopLaunchWheel.getEncoder().getVelocity() > speedTop-100) && (m_TopLaunchWheel.getEncoder().getVelocity() < speedTop+100)) && ((m_BottomLaunchWheel.getEncoder().getVelocity() > speedBottom-100) && (m_BottomLaunchWheel.getEncoder().getVelocity() < speedBottom+100))){
-//         m_controller.getHID().setRumble(RumbleType.kBothRumble, 1);
-//     }else{
-//        m_controller.getHID().setRumble(RumbleType.kBothRumble, 0);
-//     }
-//   },
- 
-//   () -> {
-//     m_controller.getHID().setRumble(RumbleType.kBothRumble, 0);
-//   });
-// }
 
   @Override
   public void periodic() {
