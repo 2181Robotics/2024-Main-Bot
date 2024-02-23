@@ -156,6 +156,7 @@ public class RobotContainer {
             
             m_operatorController.b().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand()).until(m_FeederStop::get).andThen(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1)))); 
             m_operatorController.b().onFalse(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0))); 
+            m_operatorController.leftBumper().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand()));
   
                     // *******************************
                         // Path Plan to pose, then follow path
