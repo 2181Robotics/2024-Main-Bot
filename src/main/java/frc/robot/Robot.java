@@ -24,7 +24,7 @@ import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.cameraserver.CameraServer;
 // import edu.wpi.first.cscore.CvSink;
 // import edu.wpi.first.cscore.CvSource;
-// import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.UsbCamera;
 
 //Base packages
 
@@ -46,7 +46,12 @@ import frc.utils.LocalADStarAK;
 public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
     private RobotContainer m_robotContainer;
-   // Thread m_visionThread;
+    public UsbCamera FloorCam;
+    public UsbCamera LauncherCam;
+   
+   
+   
+    // Thread m_visionThread;
    // Thread m_visionThread2;
 
 
@@ -75,9 +80,11 @@ public class Robot extends LoggedRobot {
   //   CameraServer.startAutomaticCapture(frontcam2);
 
 
-  CameraServer.startAutomaticCapture(0);
-    CameraServer.startAutomaticCapture(1);
-    
+  FloorCam = CameraServer.startAutomaticCapture(0);
+  FloorCam.setFPS(10);
+  
+  LauncherCam = CameraServer.startAutomaticCapture(1);
+  LauncherCam.setFPS(10);
 
 
 
