@@ -25,6 +25,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 // import edu.wpi.first.cscore.CvSink;
 // import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
+//import edu.wpi.first.wpilibj.DriverStation;
 
 //Base packages
 
@@ -225,7 +226,18 @@ public class Robot extends LoggedRobot {
     if (m_autonomousCommand != null) {
           m_autonomousCommand.cancel();
       }
-  }
+  
+  
+        m_robotContainer.bindDrive();
+
+
+      
+
+
+
+
+  
+    }
 
   /** This function is called periodically during operator control. */
   @Override
@@ -281,5 +293,8 @@ public class Robot extends LoggedRobot {
     // Logger.registerURCL(URCL.startExternal());
     // Logger.start();
 }
+
+
+
 
 }
