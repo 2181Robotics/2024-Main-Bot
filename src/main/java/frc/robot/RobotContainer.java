@@ -18,7 +18,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 //Imports for Controllers
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 
 //Default Needed for Swerve
@@ -26,7 +26,10 @@ import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.math.MathUtil;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.LEDs;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -58,9 +61,10 @@ public class RobotContainer {
   
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final LEDs m_leds = new LEDs();
 
   // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
 
   // Establishing the Auto Chooser that will appear on the SmartDashboard
 
@@ -76,7 +80,7 @@ public class RobotContainer {
     
     // Configure the button bindings
     configureButtonBindings();
-
+    m_leds.init();
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(
@@ -102,10 +106,15 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kR1.value)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
+    m_driverController.x().onTrue(new InstantCommand(
+            () -> m_leds.electricalPanelOrange(),
+            m_leds).andThen(() -> m_leds.arm1Blue(),m_leds).andThen(()-> m_leds.LEDShow()));
+
+   m_driverController.y().onTrue(new InstantCommand(
+            () -> m_leds.electricalPanelBlue(),
+            m_leds).andThen(() -> m_leds.arm1Orange(),m_leds).andThen(() -> m_leds.LEDShow(),m_leds));
+            
+  m_driverController.a().whileTrue(new ParallelCommandGroup(new RunCommand(()->m_leds.incArm1(), m_leds),new RunCommand(()->m_leds.electricalPanelBlue(),m_leds)));
   }
 
   /**
