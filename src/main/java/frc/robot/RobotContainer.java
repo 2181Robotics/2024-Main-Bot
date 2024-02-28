@@ -99,6 +99,9 @@ public class RobotContainer {
     m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand().until(m_FeederStop::get)).withTimeout(1.5));
     
     NamedCommands.registerCommand("Feeder", m_Feeder.getFeederWheelLaunchCommand().withTimeout(.75));
+    
+    NamedCommands.registerCommand("Intake Bottom", m_Intake.getIntakeCommand().until(m_FeederStop::get).withTimeout(0.5));
+    
     NamedCommands.registerCommand("Launch Stop", m_Launcher.setLaunchZero().withTimeout(.1));
     NamedCommands.registerCommand("Intake Stop", m_Intake.setIntakeZero().withTimeout(.1));
     NamedCommands.registerCommand("Feeder Stop", m_Feeder.setFeederZero().withTimeout(.1));
