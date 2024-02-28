@@ -1,0 +1,83 @@
+package frc.robot.Commands;
+
+import edu.wpi.first.math.controller.HolonomicDriveController;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.subsystems.DriveSubsystem;
+
+public class TurnToAngle extends Command {
+    private DriveSubsystem swerve;
+    private boolean isRelative;
+    private double goal;
+    private HolonomicDriveController holonomicDriveController;
+    private Pose2d startPos = new Pose2d();
+    private Pose2d targetPose2d = new Pose2d();
+
+    /**
+     * Turns robot to specified angle. Uses absolute rotation on field.
+     *
+     * @param swerve Swerve subsystem
+     * @param angle Requested angle to turn to
+     * @param isRelative Whether the angle is relative to the current angle: true = relative, false
+     *        = absolute
+     */
+
+    public TurnToAngle(DriveSubsystem swerve, double angle, boolean isRelative) {
+        addRequirements(swerve);
+        this.swerve = swerve;
+        this.goal = angle;
+        this.isRelative = isRelative;
+
+        PIDController xcontroller = new PIDController(Constants.AutoConstants.kPXController, 0, 0);
+        PIDController ycontroller = new PIDController(Constants.AutoConstants.kPYController, 0, 0);
+        ProfiledPIDController thetacontroller =
+            new ProfiledPIDController(4, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
+        holonomicDriveController =
+            new HolonomicDriveController(xcontroller, ycontroller, thetacontroller);
+        holonomicDriveController.setTolerance(new Pose2d(1, 1, Rotation2d.fromDegrees(0.5)));
+
+    }
+
+    @Override
+    public void initialize() {
+        startPos = swerve.getPose();
+        if (isRelative) {
+            targetPose2d = new Pose2d(startPos.getTranslation(),
+                startPos.getRotation().rotateBy(Rotation2d.fromDegrees(goal)));
+        } else {
+            targetPose2d = new Pose2d(startPos.getTranslation(), Rotation2d.fromDegrees(goal));
+        }
+    }
+
+    @Override
+    public void execute() {
+        Pose2d currPose2d = swerve.getPose();
+        ChassisSpeeds chassisSpeeds = this.holonomicDriveController.calculate(currPose2d,
+            targetPose2d, 0, targetPose2d.getRotation());
+        SwerveModuleState[] swerveModuleStates =
+            Constants.DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+        swerve.setModuleStates(swerveModuleStates);
+        // System.out.println(targetPose2d.relativeTo(currPose2d));
+    }
+
+    @Override
+    public void end(boolean interrupt) {
+        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0, 0, 0);
+        SwerveModuleState[] swerveModuleStates =
+            Constants.DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+        swerve.setModuleStates(swerveModuleStates);
+    }
+
+    @Override
+    public boolean isFinished() {
+        return holonomicDriveController.atReference();
+
+    }
+    
+}

@@ -8,12 +8,12 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-//import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 //libraries for pathplanning and simulation
 
-//import swervelib.parser.PIDFConfig;
+import swervelib.parser.PIDFConfig;
 
 
 /**
@@ -214,29 +214,29 @@ public final class Constants {
   }
 
 
-  // public static final class AutoConstants {
-  //   public static final double kMaxSpeedMetersPerSecond = 3;
-  //   public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-  //   public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-  //   public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+  public static final class AutoConstants {
+    public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+    public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
+    public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
-  //   public static final double kPXController = 1;
-  //   public static final double kPYController = 1;
-  //   public static final double kPThetaController = 1;
+    public static final double kPXController = 1;
+    public static final double kPYController = 1;
+    public static final double kPThetaController = 5;
 
-  //   // Constraint for the motion profiled robot angle controller
-  //   public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
-  //       kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+    // Constraint for the motion profiled robot angle controller
+    public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
+        kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     
-  //   //Auto constants for pathplanning
+    //Auto constants for pathplanning
 
-  //   public static final PIDFConfig xAutoPID     = new PIDFConfig(0.7, 0, 0);
-  //   public static final PIDFConfig yAutoPID     = new PIDFConfig(0.7, 0, 0);
-  //   public static final PIDFConfig angleAutoPID = new PIDFConfig(0.4, 0, 0.01);
+    public static final PIDFConfig xAutoPID     = new PIDFConfig(0.7, 0, 0);
+    public static final PIDFConfig yAutoPID     = new PIDFConfig(0.7, 0, 0);
+    public static final PIDFConfig angleAutoPID = new PIDFConfig(0.4, 0, 0.01);
 
-  //   public static final double MAX_SPEED        = 4;
-  //   public static final double MAX_ACCELERATION = 2;
-  // }
+    public static final double MAX_SPEED        = 4;
+    public static final double MAX_ACCELERATION = 2;
+  }
 
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;

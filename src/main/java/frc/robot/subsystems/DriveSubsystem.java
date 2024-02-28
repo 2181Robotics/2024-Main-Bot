@@ -25,6 +25,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 //Base libraries
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -34,10 +35,12 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.ModuleConstants;
 import frc.utils.SwerveUtils;
-
 
 
 public class DriveSubsystem extends SubsystemBase {
@@ -61,6 +64,8 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kRearRightDrivingCanId,
       DriveConstants.kRearRightTurningCanId,
       DriveConstants.kBackRightChassisAngularOffset);
+
+  
 
   // The gyro sensor
   Pigeon2 m_gyro = new Pigeon2(DriveConstants.gryoPigeonCanID);
@@ -127,11 +132,8 @@ AutoBuilder.configureHolonomic(
 
 
   this // Reference to this subsystem to set requirements
-);
-
-  }
-
-
+);}
+  
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
@@ -148,6 +150,7 @@ AutoBuilder.configureHolonomic(
           m_rearRight.getState()
   });
   Logger.recordOutput("Chassis/Pose", getPose());
+
 
   }
 
@@ -326,7 +329,30 @@ private SwerveModulePosition[] getModulePositions(){
     return Rotation2d.fromDegrees(m_gyro.getAngle() * (DriveConstants.kGyroReversed ? -1.0 : 1.0));
   }
 
-  
+
+
+
+//   public DriveSubsystem(double targetAngleDegrees, DriveSubsystem drive) {
+//     super(
+//         new PIDController(ModuleConstants.kTurningP, ModuleConstants.kTurningI, ModuleConstants.kTurningD),
+//         // Close loop on heading
+//         drive::getHeading,
+//         // Set reference to target
+//         targetAngleDegrees,
+//         // Pipe output to turn robot
+//         this::useOutput,
+//         // Require the drive
+//         drive);
+//   }
+//   public void useOutput(double output) {
+//     if (output > 0) {
+//         DriveSubsystem.arcadeDrive(0, output + F);
+//     } else if (output < 0) {
+//         DriveSubsystem.arcadeDrive(0, output - F);
+//     } else {
+//         DriveSubsystem.arcadeDrive(0, output);
+//     }
+// }
 
 
 }
