@@ -14,8 +14,8 @@ public class LEDGroup {
     private int loopStart;
 
     private int m_ledLength;
-
-    private int[] m_baseColor = {120,255,255};
+    //all colors are HSV
+    private int[] m_baseColor = {120,255,255};//blue
 
     
 
@@ -26,7 +26,7 @@ public class LEDGroup {
 
     private int rollInc = 1;
 
-    private Boolean isSolid = true;
+    //private Boolean isSolid = true;
     private Boolean isBreathing = false;
     private Boolean isRainbow = false;
     private Boolean isRolling = false;
@@ -124,7 +124,7 @@ public class LEDGroup {
 
 
 
-
+//not fully tested, don't use
     public AddressableLEDBuffer breathe(AddressableLEDBuffer ledBuffer){
 
         for (var i = 0; i < m_ledLength; i++) {
@@ -145,6 +145,8 @@ public class LEDGroup {
         return m_ledBuffer;
     }
 
+
+    //cycle through rainbow colors
     public AddressableLEDBuffer rainbow(AddressableLEDBuffer ledBuffer){
         for (var i = 0; i < m_ledLength; i++) {
             // Sets the specified LED to the RGB values for red
