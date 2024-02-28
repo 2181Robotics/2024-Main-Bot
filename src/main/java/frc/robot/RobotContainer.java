@@ -51,6 +51,10 @@ import frc.robot.Commands.TurnToAngle;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.subsystems.LEDs;
+
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -63,6 +67,8 @@ public class RobotContainer {
   
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+
+  private final LEDs m_leds = new LEDs();
 
   private final Launcher m_Launcher = new Launcher();
   private final Intake m_Intake = new Intake();
@@ -157,6 +163,14 @@ public class RobotContainer {
             m_operatorController.b().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand()).until(m_FeederStop::get).andThen(new ParallelCommandGroup(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1)),new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 1))))); 
             m_operatorController.b().onFalse(new ParallelCommandGroup(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)), new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 0)))); 
             m_operatorController.leftBumper().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand()));
+
+            m_driveCommandController.x().onTrue(new InstantCommand(            
+              () -> m_leds.electricalPanelBlueRoll(1),
+            m_leds).andThen(() -> m_leds.arm1Alliance(),m_leds).andThen(()->m_leds.underGlowBreathe(),m_leds).andThen(()->m_leds.arm2solid(),m_leds));
+
+            m_driveCommandController.y().onTrue(new InstantCommand(
+              () -> m_leds.electricalPanelBlueRoll(-1),
+              m_leds).andThen(() -> m_leds.arm1Rainbow(),m_leds));
   
                     // *******************************
                         // Path Plan to pose, then follow path
