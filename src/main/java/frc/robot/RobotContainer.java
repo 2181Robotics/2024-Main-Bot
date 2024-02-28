@@ -138,8 +138,11 @@ public class RobotContainer {
             m_driveCommandController.a().whileTrue(new RunCommand(() -> m_robotDrive.setX(),m_robotDrive));
             m_driveCommandController.rightTrigger().whileTrue(m_RightClimberArm.getRightClimberArmDownCommand());
             m_driveCommandController.leftTrigger().whileTrue(m_LeftClimberArm.getLeftClimberArmDownCommand());
-            m_driveCommandController.b().whileTrue(new TurnToAngle(m_robotDrive, -60, true));
-            m_driveCommandController.x().whileTrue(new TurnToAngle(m_robotDrive, 60, true));
+            m_driveCommandController.b().whileTrue(new TurnToAngle(m_robotDrive, -60, false));
+            m_driveCommandController.x().whileTrue(new TurnToAngle(m_robotDrive, 60, false));
+            m_driveCommandController.y().toggleOnTrue(
+              m_RightClimberArm.getRightClimberArmUpCommand().withTimeout(8).alongWith
+              (m_LeftClimberArm.getLeftClimberArmUpCommand().withTimeout(8)));
 
             m_driveCommandController.rightBumper().whileTrue(m_RightClimberArm.getRightClimberArmUpCommand());
             m_driveCommandController.leftBumper().whileTrue(m_LeftClimberArm.getLeftClimberArmUpCommand());

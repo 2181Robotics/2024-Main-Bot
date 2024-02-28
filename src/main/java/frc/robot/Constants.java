@@ -204,6 +204,15 @@ public final class Constants {
     //Sets the speed for the Climber arms
     public static final double kLeftClimberArmSpeed = .25;
     public static final double kRightClimberArmSpeed = .25;
+  
+    public static final double climbP = 6.0e-5;
+    public static final double climbI = 0.750e-6;
+    public static final double climbD = 0;
+    public static final double climbFF = 0.000015;
+
+    public static final double RightClimberArmPosition = 10000;
+    public static final double LeftClimberArmPosition = 10000;
+  
   }
 
 

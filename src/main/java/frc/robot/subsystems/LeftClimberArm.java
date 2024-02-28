@@ -6,7 +6,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 
@@ -14,6 +17,8 @@ public class LeftClimberArm extends SubsystemBase{
     CANSparkMax m_LeftClimberArm;
     SmartdashboardItem m_LeftClimberArmSpeed;
     SmartdashboardItem m_LeftClimberArmCommandSpeed;
+
+    SparkPIDController LeftClimberArmPID;
     
     public LeftClimberArm() {
 
@@ -21,8 +26,41 @@ public class LeftClimberArm extends SubsystemBase{
     m_LeftClimberArmCommandSpeed = new SmartdashboardItem("LeftClimberArmCommandSpeed"); 
     m_LeftClimberArm.setSmartCurrentLimit(kLeftClimberArmCurrentLimit);
     m_LeftClimberArmCommandSpeed.setNumber(kLeftClimberArmSpeed);  
-    m_LeftClimberArm.setIdleMode(IdleMode.kBrake); 
+    m_LeftClimberArm.setIdleMode(IdleMode.kBrake);
+    m_LeftClimberArm.restoreFactoryDefaults();
+    m_LeftClimberArm.setInverted(false);
+
+    m_LeftClimberArm.enableSoftLimit(SoftLimitDirection.kForward, true);
+    m_LeftClimberArm.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    m_LeftClimberArm.setSoftLimit(SoftLimitDirection.kForward, -20);
+    m_LeftClimberArm.setSoftLimit(SoftLimitDirection.kReverse, -320);
+
+
+
+
+    LeftClimberArmPID = m_LeftClimberArm.getPIDController();
+
+        LeftClimberArmPID.setP(climbP);
+        LeftClimberArmPID.setI(climbI);
+        LeftClimberArmPID.setD(climbD);
+        LeftClimberArmPID.setFF(climbFF);
+        LeftClimberArmPID.setOutputRange(0.0, 1.0);
+        m_LeftClimberArm.burnFlash();
+
     }
+
+    // public Command getAutoLeftClimberArmUP() {
+    //   return this.runEnd(
+    //     () -> {
+    //        LeftClimberArmPID.setReference(LeftClimberArmPosition, ControlType.kPosition);
+    //     },
+
+    //     () -> {
+    //       setLeftClimberArm(0);
+    //     });
+
+    // } 
+    
 
       public Command getLeftClimberArmUpCommand() {
         // The startEnd helper method takes a method to call when the command is initialized and one to
