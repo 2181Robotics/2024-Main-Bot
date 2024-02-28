@@ -30,10 +30,10 @@ public class LeftClimberArm extends SubsystemBase{
     m_LeftClimberArm.restoreFactoryDefaults();
     m_LeftClimberArm.setInverted(false);
 
-    m_LeftClimberArm.enableSoftLimit(SoftLimitDirection.kForward, true);
-    m_LeftClimberArm.enableSoftLimit(SoftLimitDirection.kReverse, true);
-    m_LeftClimberArm.setSoftLimit(SoftLimitDirection.kForward, -20);
-    m_LeftClimberArm.setSoftLimit(SoftLimitDirection.kReverse, -320);
+    // m_LeftClimberArm.enableSoftLimit(SoftLimitDirection.kForward, true);
+    // m_LeftClimberArm.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    // m_LeftClimberArm.setSoftLimit(SoftLimitDirection.kForward, -20);
+    // m_LeftClimberArm.setSoftLimit(SoftLimitDirection.kReverse, -320);
 
 
 
