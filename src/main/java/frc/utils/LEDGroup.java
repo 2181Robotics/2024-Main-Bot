@@ -7,15 +7,17 @@ import edu.wpi.first.wpilibj.*;
 
 public class LEDGroup {
     
+    private AddressableLEDBuffer m_ledBuffer;
+
     private int m_startLED;
 
     private int loopStart;
 
     private int m_ledLength;
 
-    private int[] m_baseColor = {241,95,87};
+    private int[] m_baseColor = {120,255,255};
 
-    private AddressableLEDBuffer m_ledBuffer;
+    
 
     private int rainbowHue = 0;
 
@@ -38,7 +40,7 @@ public class LEDGroup {
             m_ledLength = 1;
 
         m_ledBuffer = ledBuffer;
-        m_endLED = m_startLED + m_ledLength - 1;
+        
         loopStart = 0;
 
     }
@@ -52,15 +54,15 @@ public class LEDGroup {
     }
 
     public void setOrange(){
-        setColor (16,85,94);
+        setColor (10,255,255);
     }
 
     public void setBlue(){
-        setColor(241,95,87);
+        setColor(120,255,255);
     }
 
     public void setRed(){
-        setColor(5,92,94);
+        setColor(0,255,255);
     }
 
     public void setAllianceColor(){
@@ -107,7 +109,7 @@ public class LEDGroup {
     public AddressableLEDBuffer incRoll(AddressableLEDBuffer ledBuffer){
         for (var i = 0; i < m_ledLength; i++) {
             if(i<=m_ledLength/2){
-                ledBuffer.setRGB( m_startLED + (i + loopStart)%m_ledLength, m_baseColor[0], m_baseColor[1], m_baseColor[2]);
+                ledBuffer.setHSV( m_startLED + (i + loopStart)%m_ledLength, m_baseColor[0], m_baseColor[1], m_baseColor[2]);
             }else{
                 ledBuffer.setHSV( m_startLED + (i + loopStart)%m_ledLength, 0, 0, 255);
             }
@@ -149,7 +151,7 @@ public class LEDGroup {
             ledBuffer.setHSV(i + m_startLED, rainbowHue, 255, 255);
             
         }
-        rainbowHue = (rainbowHue+10)%180;
+        rainbowHue = (rainbowHue+1)%180;
         return m_ledBuffer;
     }
 

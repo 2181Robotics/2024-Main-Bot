@@ -107,14 +107,14 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     m_driverController.x().onTrue(new InstantCommand(
-            () -> m_leds.electricalPanelOrange(),
-            m_leds).andThen(() -> m_leds.arm1Blue(),m_leds).andThen(()-> m_leds.LEDShow()));
+            () -> m_leds.electricalPanelBlueRoll(1),
+            m_leds).andThen(() -> m_leds.arm1Alliance(),m_leds).andThen(()->m_leds.underGlowBreathe(),m_leds).andThen(()->m_leds.arm2solid(),m_leds));
 
    m_driverController.y().onTrue(new InstantCommand(
-            () -> m_leds.electricalPanelBlue(),
-            m_leds).andThen(() -> m_leds.arm1Orange(),m_leds).andThen(() -> m_leds.LEDShow(),m_leds));
+            () -> m_leds.electricalPanelBlueRoll(-1),
+            m_leds).andThen(() -> m_leds.arm1Rainbow(),m_leds));
             
-  m_driverController.a().whileTrue(new ParallelCommandGroup(new RunCommand(()->m_leds.incArm1(), m_leds),new RunCommand(()->m_leds.electricalPanelBlue(),m_leds)));
+  
   }
 
   /**
