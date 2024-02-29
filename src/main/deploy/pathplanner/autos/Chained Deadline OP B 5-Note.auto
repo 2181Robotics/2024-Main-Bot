@@ -86,12 +86,6 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "Intake Bottom"
-                }
-              },
-              {
                 "type": "sequential",
                 "data": {
                   "commands": [
@@ -141,6 +135,12 @@
                     }
                   ]
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Bottom"
+                }
               }
             ]
           }
@@ -181,12 +181,6 @@
           "type": "deadline",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Bottom"
-                }
-              },
               {
                 "type": "sequential",
                 "data": {
@@ -237,6 +231,12 @@
                     }
                   ]
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Bottom"
+                }
               }
             ]
           }
@@ -277,12 +277,6 @@
           "type": "deadline",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Bottom"
-                }
-              },
               {
                 "type": "sequential",
                 "data": {
@@ -333,6 +327,12 @@
                     }
                   ]
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Bottom"
+                }
               }
             ]
           }
@@ -373,12 +373,6 @@
           "type": "deadline",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Bottom"
-                }
-              },
               {
                 "type": "sequential",
                 "data": {
@@ -428,6 +422,12 @@
                       }
                     }
                   ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Bottom"
                 }
               }
             ]
