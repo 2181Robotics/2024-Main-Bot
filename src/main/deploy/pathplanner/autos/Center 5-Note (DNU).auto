@@ -68,12 +68,6 @@
                       "data": {
                         "waitTime": 0.25
                       }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Intake"
-                      }
                     }
                   ]
                 }
@@ -137,9 +131,16 @@
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "Intake Bottom"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake Bottom"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -231,12 +232,6 @@
                     }
                   ]
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Bottom"
-                }
               }
             ]
           }
@@ -327,12 +322,6 @@
                     }
                   ]
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Bottom"
-                }
               }
             ]
           }
@@ -422,12 +411,6 @@
                       }
                     }
                   ]
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Bottom"
                 }
               }
             ]
