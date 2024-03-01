@@ -102,7 +102,7 @@
                           {
                             "type": "named",
                             "data": {
-                              "name": "Feeder"
+                              "name": "Intake and Shoot"
                             }
                           }
                         ]
@@ -125,19 +125,6 @@
                       "type": "named",
                       "data": {
                         "name": "Speaker Shoot"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Intake Bottom"
                       }
                     }
                   ]
@@ -205,7 +192,7 @@
                           {
                             "type": "named",
                             "data": {
-                              "name": "Feeder"
+                              "name": "Intake and Shoot"
                             }
                           }
                         ]
@@ -295,7 +282,7 @@
                           {
                             "type": "named",
                             "data": {
-                              "name": "Feeder"
+                              "name": "Intake and Shoot"
                             }
                           }
                         ]
@@ -385,7 +372,7 @@
                           {
                             "type": "named",
                             "data": {
-                              "name": "Feeder"
+                              "name": "Intake and Shoot"
                             }
                           }
                         ]
