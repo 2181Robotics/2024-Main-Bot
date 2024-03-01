@@ -108,7 +108,7 @@ public class RobotContainer {
 
    
    
-      autoChooser = AutoBuilder.buildAutoChooser();
+      autoChooser = AutoBuilder.buildAutoChooser("Center 4-Note");
 
       SmartDashboard.putData("Auto Chooser", autoChooser); 
 
