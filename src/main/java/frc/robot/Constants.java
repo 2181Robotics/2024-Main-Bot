@@ -188,7 +188,7 @@ public final class Constants {
     public static final double kTopIntakeWheelSpeed = -.35;
     public static final double kBottomIntakeWheelSpeed = .40;
 
-    public static final double kFeederWheelIntakeSpeed = .2;
+    public static final double kFeederWheelIntakeSpeed = .4;
 
   }
 
