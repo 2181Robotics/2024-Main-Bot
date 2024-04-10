@@ -70,6 +70,7 @@ public class RobotContainer {
   private final RightClimberArm m_RightClimberArm = new RightClimberArm();
   private final LeftClimberArm m_LeftClimberArm = new LeftClimberArm();
   
+  
 
 
   // The driver's controller
@@ -83,6 +84,7 @@ public class RobotContainer {
   
   
   DigitalInput m_FeederStop;
+
   
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -90,13 +92,13 @@ public class RobotContainer {
   public RobotContainer() {
     
     m_FeederStop = new DigitalInput(9);
-   
+    
 
     // Add all actions to PathPlanner
     NamedCommands.registerCommand("Amp Shoot", m_Launcher.getLaunchSpeakerCommand().withTimeout(1.5));
     NamedCommands.registerCommand("Speaker Shoot", m_Launcher.getLaunchSpeakerCommand().withTimeout(2.5));
     NamedCommands.registerCommand("Intake", 
-    m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand().until(m_FeederStop::get)).withTimeout(1.5));
+    m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand().onlyWhile(m_FeederStop::get)).withTimeout(1.5));
     
     NamedCommands.registerCommand("Feeder", m_Feeder.getFeederWheelLaunchCommand().withTimeout(.75));
     
@@ -104,7 +106,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Intake and Shoot",
     m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelLaunchCommand()).withTimeout(.75) );
 
-    NamedCommands.registerCommand("Intake Bottom", m_Intake.getIntakeCommand().until(m_FeederStop::get).withTimeout(0.2));
+    NamedCommands.registerCommand("Intake Bottom", m_Intake.getIntakeCommand().onlyWhile(m_FeederStop::get).withTimeout(0.2));
     
     NamedCommands.registerCommand("Launch Stop", m_Launcher.setLaunchZero().withTimeout(.1));
     NamedCommands.registerCommand("Intake Stop", m_Intake.setIntakeZero().withTimeout(.1));
@@ -158,10 +160,13 @@ public class RobotContainer {
             m_operatorController.y().whileTrue(m_Launcher.getLaunchSpeakerCommand());
             m_operatorController.a().whileTrue(m_Launcher.getLaunchAmpCommand().alongWith());
             m_operatorController.rightTrigger().whileTrue(m_Feeder.getFeederWheelLaunchCommand());
-            m_operatorController.leftTrigger().whileTrue(m_Feeder.getReverseFeederCommand());
-
+            m_operatorController.leftTrigger().whileTrue(m_Feeder.getReverseFeederCommand()
+              .onlyWhile(m_FeederStop::get).andThen(new ParallelCommandGroup(new RunCommand(
+                () -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1)),
+                new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 1))))); 
+             m_operatorController.leftTrigger().onFalse(new ParallelCommandGroup(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)), new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 0)))); 
             
-            m_operatorController.b().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand()).until(m_FeederStop::get).andThen(new ParallelCommandGroup(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1)),new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 1))))); 
+            m_operatorController.b().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand()).onlyWhile(m_FeederStop::get).andThen(new ParallelCommandGroup(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1)),new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 1))))); 
             m_operatorController.b().onFalse(new ParallelCommandGroup(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)), new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 0)))); 
             m_operatorController.leftBumper().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand()));
   

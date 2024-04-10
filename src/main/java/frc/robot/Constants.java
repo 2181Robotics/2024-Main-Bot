@@ -185,10 +185,10 @@ public final class Constants {
     public static final int kBottomIntakeWheelCurrentLimit = 80;
 
     //Sets the speed for the intake wheels
-    public static final double kTopIntakeWheelSpeed = -.35;
-    public static final double kBottomIntakeWheelSpeed = .40;
+    public static final double kTopIntakeWheelSpeed = -.25;
+    public static final double kBottomIntakeWheelSpeed = .30;
 
-    public static final double kFeederWheelIntakeSpeed = .4;
+    public static final double kFeederWheelIntakeSpeed = .3;
 
   }
 
