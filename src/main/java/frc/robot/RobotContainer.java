@@ -35,6 +35,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -49,7 +50,7 @@ import frc.robot.subsystems.RightClimberArm;
 
 import frc.robot.Commands.TurnToAngle;
 
-import edu.wpi.first.wpilibj.DigitalInput;
+
 import edu.wpi.first.wpilibj.DriverStation;
 
 /*
@@ -69,9 +70,9 @@ public class RobotContainer {
   private final Feeder m_Feeder = new Feeder();
   private final RightClimberArm m_RightClimberArm = new RightClimberArm();
   private final LeftClimberArm m_LeftClimberArm = new LeftClimberArm();
-  
-  
 
+  Trigger m_feederStopLeftTrigger = Robot.m_feederStopLeft.castTo(Trigger::new);  
+  Trigger m_feedStopRightTrigger = Robot.m_feederStopRight.castTo(Trigger::new);
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -83,7 +84,9 @@ public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
   
   
-  DigitalInput m_FeederStop;
+
+
+
 
   
   /**
@@ -91,22 +94,21 @@ public class RobotContainer {
    */
   public RobotContainer() {
     
-    m_FeederStop = new DigitalInput(9);
+
     
 
     // Add all actions to PathPlanner
     NamedCommands.registerCommand("Amp Shoot", m_Launcher.getLaunchSpeakerCommand().withTimeout(1.5));
     NamedCommands.registerCommand("Speaker Shoot", m_Launcher.getLaunchSpeakerCommand().withTimeout(2.5));
     NamedCommands.registerCommand("Intake", 
-    m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand().onlyWhile(m_FeederStop::get)).withTimeout(1.5));
-    
+    m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand().onlyWhile(Robot.m_feederStopLeft.or(Robot.m_feederStopRight))).withTimeout(1.5));  
     NamedCommands.registerCommand("Feeder", m_Feeder.getFeederWheelLaunchCommand().withTimeout(.75));
     
 
     NamedCommands.registerCommand("Intake and Shoot",
     m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelLaunchCommand()).withTimeout(.75) );
 
-    NamedCommands.registerCommand("Intake Bottom", m_Intake.getIntakeCommand().onlyWhile(m_FeederStop::get).withTimeout(0.2));
+    NamedCommands.registerCommand("Intake Bottom", m_Intake.getIntakeCommand().onlyWhile(Robot.m_feederStopLeft.or(Robot.m_feederStopRight)).withTimeout(0.2));
     
     NamedCommands.registerCommand("Launch Stop", m_Launcher.setLaunchZero().withTimeout(.1));
     NamedCommands.registerCommand("Intake Stop", m_Intake.setIntakeZero().withTimeout(.1));
@@ -161,12 +163,12 @@ public class RobotContainer {
             m_operatorController.a().whileTrue(m_Launcher.getLaunchAmpCommand().alongWith());
             m_operatorController.rightTrigger().whileTrue(m_Feeder.getFeederWheelLaunchCommand());
             m_operatorController.leftTrigger().whileTrue(m_Feeder.getReverseFeederCommand()
-              .onlyWhile(m_FeederStop::get).andThen(new ParallelCommandGroup(new RunCommand(
+              .onlyWhile(m_feederStopLeftTrigger.or(m_feedStopRightTrigger)).andThen(new ParallelCommandGroup(new RunCommand(
                 () -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1)),
                 new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 1))))); 
              m_operatorController.leftTrigger().onFalse(new ParallelCommandGroup(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)), new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 0)))); 
             
-            m_operatorController.b().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand()).onlyWhile(m_FeederStop::get).andThen(new ParallelCommandGroup(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1)),new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 1))))); 
+            m_operatorController.b().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand()).onlyWhile(m_feederStopLeftTrigger.or(m_feedStopRightTrigger)).andThen(new ParallelCommandGroup(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1)),new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 1))))); 
             m_operatorController.b().onFalse(new ParallelCommandGroup(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)), new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 0)))); 
             m_operatorController.leftBumper().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand()));
   

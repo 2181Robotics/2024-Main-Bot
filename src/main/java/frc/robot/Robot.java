@@ -25,13 +25,17 @@ import edu.wpi.first.cameraserver.CameraServer;
 // import edu.wpi.first.cscore.CvSink;
 // import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.event.BooleanEvent;
 //import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.event.EventLoop;
 
 //Base packages
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.utils.LocalADStarAK;
+
 
 
 /**
@@ -49,6 +53,22 @@ public class Robot extends LoggedRobot {
     private RobotContainer m_robotContainer;
     public UsbCamera FloorCam;
     public UsbCamera LauncherCam;
+    public static DigitalInput m_FeederStopLeftInput;
+   public static DigitalInput m_FeederStopRightInput;
+    private static final EventLoop m_feederStopLoop = new EventLoop();
+
+
+
+    
+      static BooleanEvent m_feederStopLeft =
+        new BooleanEvent(m_feederStopLoop, m_FeederStopLeftInput::get)
+            // debounce for more stability
+            .debounce(0.2);
+
+      static BooleanEvent m_feederStopRight =
+        new BooleanEvent(m_feederStopLoop, m_FeederStopRightInput::get)
+            // debounce for more stability
+            .debounce(0.2);
    
    
    
@@ -68,6 +88,9 @@ public class Robot extends LoggedRobot {
     initializeLogging();
     Pathfinding.setPathfinder(new LocalADStarAK());
     m_robotContainer = new RobotContainer();
+    
+    m_FeederStopLeftInput = new DigitalInput(9);
+    m_FeederStopRightInput = new DigitalInput(7);
    
    
   //  UsbCamera frontcam1 = new UsbCamera("cam1", 0);
@@ -183,6 +206,7 @@ public class Robot extends LoggedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.    
     CommandScheduler.getInstance().run();
+
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
