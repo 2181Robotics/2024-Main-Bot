@@ -60,15 +60,15 @@ public class Robot extends LoggedRobot {
 
 
     
-      static BooleanEvent m_feederStopLeft =
-        new BooleanEvent(m_feederStopLoop, m_FeederStopLeftInput::get)
-            // debounce for more stability
-            .debounce(0.2);
+      // static BooleanEvent m_feederStopLeft =
+      //   new BooleanEvent(m_feederStopLoop, m_FeederStopLeftInput::get)
+      //       // debounce for more stability
+      //       .debounce(0.2);
 
-      static BooleanEvent m_feederStopRight =
-        new BooleanEvent(m_feederStopLoop, m_FeederStopRightInput::get)
-            // debounce for more stability
-            .debounce(0.2);
+      // static BooleanEvent m_feederStopRight =
+      //   new BooleanEvent(m_feederStopLoop, m_FeederStopRightInput::get)
+      //       // debounce for more stability
+      //       .debounce(0.2);
    
    
    
@@ -89,8 +89,6 @@ public class Robot extends LoggedRobot {
     Pathfinding.setPathfinder(new LocalADStarAK());
     m_robotContainer = new RobotContainer();
     
-    m_FeederStopLeftInput = new DigitalInput(9);
-    m_FeederStopRightInput = new DigitalInput(7);
    
    
   //  UsbCamera frontcam1 = new UsbCamera("cam1", 0);
