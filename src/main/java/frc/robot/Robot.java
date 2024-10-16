@@ -26,12 +26,15 @@ import edu.wpi.first.cameraserver.CameraServer;
 // import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
 //import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 
 //Base packages
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.utils.LocalADStarAK;
+import frc.utils.LEDGroup;
 
 
 /**
@@ -68,25 +71,15 @@ public class Robot extends LoggedRobot {
     initializeLogging();
     Pathfinding.setPathfinder(new LocalADStarAK());
     m_robotContainer = new RobotContainer();
-   
-   
-  //  UsbCamera frontcam1 = new UsbCamera("cam1", 0);
-  //  frontcam1.setFPS(15);
-  //   CameraServer.startAutomaticCapture(frontcam1);
-    
-    
-
-  //   UsbCamera frontcam2 = new UsbCamera("cam1", 0);
-  //  frontcam1.setFPS(15);
-  //   CameraServer.startAutomaticCapture(frontcam2);
-
 
   FloorCam = CameraServer.startAutomaticCapture(0);
   FloorCam.setFPS(10);
   
   LauncherCam = CameraServer.startAutomaticCapture(1);
   LauncherCam.setFPS(10);
+  
 
+  
 
 
 

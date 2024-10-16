@@ -164,13 +164,13 @@ public class RobotContainer {
             m_operatorController.b().onFalse(new ParallelCommandGroup(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)), new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 0)))); 
             m_operatorController.leftBumper().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand()));
 
-            m_driveCommandController.x().onTrue(new InstantCommand(            
-              () -> m_leds.electricalPanelBlueRoll(1),
-            m_leds).andThen(() -> m_leds.arm1Alliance(),m_leds).andThen(()->m_leds.underGlowBreathe(),m_leds).andThen(()->m_leds.arm2solid(),m_leds));
+            // m_driveCommandController.x().onTrue(new InstantCommand(            
+            //   () -> m_leds.electricalPanelBlueRoll(1),
+            // m_leds).andThen(() -> m_leds.arm1Alliance(),m_leds).andThen(()->m_leds.underGlowBreathe(),m_leds).andThen(()->m_leds.arm2solid(),m_leds));
 
-            m_driveCommandController.y().onTrue(new InstantCommand(
-              () -> m_leds.electricalPanelBlueRoll(-1),
-              m_leds).andThen(() -> m_leds.arm1Rainbow(),m_leds));
+            // m_driveCommandController.y().onTrue(new InstantCommand(
+            //   () -> m_leds.electricalPanelBlueRoll(-1),
+            //   m_leds).andThen(() -> m_leds.arm1Rainbow(),m_leds));
   
                     // *******************************
                         // Path Plan to pose, then follow path
