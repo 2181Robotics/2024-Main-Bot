@@ -185,10 +185,10 @@ public final class Constants {
     public static final int kBottomIntakeWheelCurrentLimit = 80;
 
     //Sets the speed for the intake wheels
-    public static final double kTopIntakeWheelSpeed = -.35;
-    public static final double kBottomIntakeWheelSpeed = .40;
+    public static final double kTopIntakeWheelSpeed = -.25;
+    public static final double kBottomIntakeWheelSpeed = .30;
 
-    public static final double kFeederWheelIntakeSpeed = .2;
+    public static final double kFeederWheelIntakeSpeed = .3;
 
   }
 
@@ -250,4 +250,49 @@ public final class Constants {
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
   }
+
+
+
+
+  public static class Colors {
+    public double pat1_larscan = -0.01;
+    public double pat2_larScan = 0.19;
+    public double fix_rain = -0.99;
+    public double fix_rainParty = -0.97;
+    public double fix_ocean = -0.95;
+    public double fix_Lave = -0.93;
+    public double fix_forest = -0.91;
+    public double endToEndBlend = 0.47;
+    public double pat2_lightChase = 0.21;
+    public double pat2_shot = 0.33;
+    
+    public double hotPink = 0.57;
+    public double darkRed = 0.59;
+    public double red = 0.61;
+    public double redOrange = 0.63;
+    public double orange = 0.65;
+    public double gold = 0.67;
+    public double yellow = 0.69;
+    public double lawnGreen = 0.71;
+    public double lime = 0.73;
+    public double darkGreen = 0.75;
+    public double green = 0.77;
+    public double blue_green = 0.79;
+    public double aqua = 0.81;
+    public double skyBlue = 0.83;
+    public double dark_blue = 0.85;
+    public double blue = 0.87;
+    public double blueViolet = 0.89;
+    public double purple = 0.91;
+    public double white = 0.93;
+    public double gray = 0.95;
+    public double dark_gray = 0.97;
+    public double black = 0.99;
+  }
+
+
+
+
+
+
 }
