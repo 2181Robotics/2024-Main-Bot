@@ -175,7 +175,7 @@ public class RobotContainer {
             m_operatorController.y().whileTrue(
                 new ParallelCommandGroup(
                 new RunCommand(() -> m_Launcher.getLaunchSpeakerCommand()),
-                new RunCommand(() -> m_Blinkin.setRedChase())
+                new RunCommand(() -> Blinkin.setRedChase())
                 
                 )); 
 
@@ -197,7 +197,7 @@ public class RobotContainer {
               .onlyWhile(m_FeederStop::get).andThen(new ParallelCommandGroup(
                 new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1)),
                 new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 1)),
-                new RunCommand(() -> m_Blinkin.setGreen())
+                new RunCommand(() -> Blinkin.setGreen())
                 
                 ))); 
 
@@ -243,7 +243,7 @@ public class RobotContainer {
                     new ParallelCommandGroup(
                       new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1)),
                       new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 1)),
-                      new RunCommand(() -> m_Blinkin.setGreen())
+                      new RunCommand(() -> Blinkin.setGreen())
                       
                       ))); 
           
