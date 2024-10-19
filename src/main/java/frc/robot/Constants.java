@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.regex.Pattern;
+
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.geometry.Translation2d;
@@ -288,6 +290,12 @@ public final class Constants {
     public double gray = 0.95;
     public double dark_gray = 0.97;
     public double black = 0.99;
+
+    public double OceanWaves = -0.41;
+
+    public double RedChase = -0.31;    
+    
+    
   }
 
 

@@ -70,7 +70,11 @@ public class RobotContainer {
   private final Feeder m_Feeder = new Feeder();
   private final RightClimberArm m_RightClimberArm = new RightClimberArm();
   private final LeftClimberArm m_LeftClimberArm = new LeftClimberArm();
-DigitalInput m_FeederStop;
+  
+  private final Blinkin m_Blinkin = new Blinkin();
+
+
+  DigitalInput m_FeederStop;
 
 
   // The driver's controller
@@ -129,6 +133,9 @@ DigitalInput m_FeederStop;
 
     // Configure default commands
     bindDrive();
+
+
+
   }
 
 
@@ -160,18 +167,100 @@ DigitalInput m_FeederStop;
             m_driveCommandController.leftBumper().whileTrue(m_LeftClimberArm.getLeftClimberArmUpCommand());
 
 
-            m_operatorController.y().whileTrue(m_Launcher.getLaunchSpeakerCommand());
+          // working command
+          //  m_operatorController.y().whileTrue(m_Launcher.getLaunchSpeakerCommand());
+
+
+          // Added racing red lights to fire command
+            m_operatorController.y().whileTrue(
+                new ParallelCommandGroup(
+                new RunCommand(() -> m_Launcher.getLaunchSpeakerCommand()),
+                new RunCommand(() -> m_Blinkin.setRedChase())
+                
+                )); 
+
+
+
             m_operatorController.a().whileTrue(m_Launcher.getLaunchAmpCommand().alongWith());
             m_operatorController.rightTrigger().whileTrue(m_Feeder.getFeederWheelLaunchCommand());
-            m_operatorController.leftTrigger().whileTrue(m_Feeder.getReverseFeederCommand()
-              .onlyWhile(m_FeederStop::get).andThen(new ParallelCommandGroup(new RunCommand(
-                () -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1)),
-                new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 1))))); 
-             m_operatorController.leftTrigger().onFalse(new ParallelCommandGroup(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)), new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 0)))); 
+           
+           //Working function
+           // m_operatorController.leftTrigger().whileTrue(m_Feeder.getReverseFeederCommand()
+           //   .onlyWhile(m_FeederStop::get).andThen(new ParallelCommandGroup(
+           //     new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1)),
+          //      new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 1))
+          //      ))); 
+
+
+            //Attempt at adding lights
+                m_operatorController.leftTrigger().whileTrue(m_Feeder.getReverseFeederCommand()
+              .onlyWhile(m_FeederStop::get).andThen(new ParallelCommandGroup(
+                new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1)),
+                new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 1)),
+                new RunCommand(() -> m_Blinkin.setGreen())
+                
+                ))); 
+
+
             
-             m_operatorController.b().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand()).onlyWhile(m_FeederStop::get).andThen(new ParallelCommandGroup(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1)),new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 1))))); 
-            m_operatorController.b().onFalse(new ParallelCommandGroup(new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)), new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 0)))); 
-            m_operatorController.leftBumper().whileTrue(m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand()));
+
+
+
+
+
+            //Turns off Rumble for both controllers when button not pressed
+            m_operatorController.leftTrigger().onFalse(
+                new ParallelCommandGroup(
+                    new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)), 
+                    new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 0))
+                    
+                    )); 
+            
+            //Working command
+            // m_operatorController.b().whileTrue(
+            //     m_Intake.getIntakeCommand().alongWith(
+            //     m_Feeder.getFeederWheelIntakeCommand()).onlyWhile(
+            //       m_FeederStop::get).andThen(
+            //         new ParallelCommandGroup(
+            //           new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1)),
+            //           new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 1))
+                     
+                      
+            //           ))); 
+
+
+
+
+
+
+
+          //Added green light wehn note intake successful
+
+            m_operatorController.b().whileTrue(
+                m_Intake.getIntakeCommand().alongWith(
+                m_Feeder.getFeederWheelIntakeCommand()).onlyWhile(
+                  m_FeederStop::get).andThen(
+                    new ParallelCommandGroup(
+                      new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1)),
+                      new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 1)),
+                      new RunCommand(() -> m_Blinkin.setGreen())
+                      
+                      ))); 
+          
+            //Turns off Rumble for both controllers when button not pressed
+            m_operatorController.b().onFalse(
+                new ParallelCommandGroup(
+                  new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)),
+                  new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 0))
+                  
+                  )); 
+
+
+            m_operatorController.leftBumper().whileTrue(
+              m_Intake.getIntakeCommand().alongWith(
+              m_Feeder.getFeederWheelIntakeCommand())
+              
+              );
   
 
 
@@ -281,6 +370,9 @@ DigitalInput m_FeederStop;
                 true, true),
             m_robotDrive));
         }
+
+
+    
 
 
 }
