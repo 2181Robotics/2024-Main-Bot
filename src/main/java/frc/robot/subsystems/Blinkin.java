@@ -50,11 +50,13 @@ public static Command setRedChase() {
         return new InstantCommand(() -> blinkin.set(m_colors.RedChase));
     }
 
+public static Command setDefault(double Color) {
+        return new InstantCommand(() -> blinkin.set(Color));
+}
 
     @Override
     public void periodic() {
     }
-
     
 }
 

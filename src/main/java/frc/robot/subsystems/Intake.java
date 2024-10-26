@@ -30,13 +30,11 @@ public class Intake extends SubsystemBase {
     m_TopIntakeWheel = new CANSparkMax(kTopIntakeWheelID, MotorType.kBrushless);
     m_TopIntakeWheel.setSmartCurrentLimit(kTopIntakeWheelCurrentLimit);
 
-
     m_BottomIntakeWheelCommandSpeed = new SmartdashboardItem("BottomIntakeCommandSpeed");
     m_BottomIntakeWheelCommandSpeed.setNumber(kBottomIntakeWheelSpeed);
     
     m_TopIntakeWheelCommandSpeed = new SmartdashboardItem("TopIntakeWheelCommandSpeed"); 
     m_TopIntakeWheelCommandSpeed.setNumber(kTopIntakeWheelSpeed);
-
 
     }
 

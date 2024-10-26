@@ -5,17 +5,14 @@
 package frc.robot.subsystems;
 
 //Advantage Kit Library
-
 import org.littletonrobotics.junction.Logger;
 
 
 //Import Gyro
-
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 
 //These are the libraries needed for PathPlanner
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
@@ -23,9 +20,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 
 //Base libraries
-
 import edu.wpi.first.wpilibj.DriverStation;
-
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -62,8 +57,6 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kRearRightTurningCanId,
       DriveConstants.kBackRightChassisAngularOffset);
 
-  
-
   // The gyro sensor
   Pigeon2 m_gyro = new Pigeon2(DriveConstants.gryoPigeonCanID);
 
@@ -76,18 +69,6 @@ public class DriveSubsystem extends SubsystemBase {
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
-
- //private SmartdashboardItem SDAngle = new SmartdashboardItem("Pigeon Angle");
- //private SmartdashboardItem SDFrontLeftPos = new SmartdashboardItem("Front Left Position");
- //private SmartdashboardItem SDFrontRightPos = new SmartdashboardItem("Front Right Position");
- //private SmartdashboardItem SDRearRightPos = new SmartdashboardItem("Rear Right Position");
- //private SmartdashboardItem SDRearLeftPos = new SmartdashboardItem("Rear Left Position");
- //private SmartdashboardItem SDXSpeed = new SmartdashboardItem("Commanded X Speed");
- //private SmartdashboardItem SDYSpeed = new SmartdashboardItem("Commanded Y Speed");
- //private SmartdashboardItem SDRotation = new SmartdashboardItem("Commanded Rotation");
-
-
-
 // Odometry class for tracking robot pose
   SwerveDrivePoseEstimator m_odometry = new SwerveDrivePoseEstimator(
       DriveConstants.kDriveKinematics,
@@ -95,10 +76,8 @@ public class DriveSubsystem extends SubsystemBase {
       getModulePositions(),
       new Pose2d());
 
-
 /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-
 
 // Configure the AutoBuilder last
 AutoBuilder.configureHolonomic(
@@ -147,7 +126,6 @@ AutoBuilder.configureHolonomic(
           m_rearRight.getState()
   });
   Logger.recordOutput("Chassis/Pose", getPose());
-
 
   }
 
@@ -325,31 +303,5 @@ private SwerveModulePosition[] getModulePositions(){
   private Rotation2d getHeading() {
     return Rotation2d.fromDegrees(m_gyro.getAngle() * (DriveConstants.kGyroReversed ? -1.0 : 1.0));
   }
-
-
-
-
-//   public DriveSubsystem(double targetAngleDegrees, DriveSubsystem drive) {
-//     super(
-//         new PIDController(ModuleConstants.kTurningP, ModuleConstants.kTurningI, ModuleConstants.kTurningD),
-//         // Close loop on heading
-//         drive::getHeading,
-//         // Set reference to target
-//         targetAngleDegrees,
-//         // Pipe output to turn robot
-//         this::useOutput,
-//         // Require the drive
-//         drive);
-//   }
-//   public void useOutput(double output) {
-//     if (output > 0) {
-//         DriveSubsystem.arcadeDrive(0, output + F);
-//     } else if (output < 0) {
-//         DriveSubsystem.arcadeDrive(0, output - F);
-//     } else {
-//         DriveSubsystem.arcadeDrive(0, output);
-//     }
-// }
-
 
 }

@@ -4,50 +4,33 @@
 
 package frc.robot;
 
-
-//Advantage Kit Logging
-
-//import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-
-
 //PathPlanner 
-
-//import edu.wpi.first.math.util.Units;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-//import com.pathplanner.lib.path.PathConstraints;
-//import com.pathplanner.lib.path.PathPlannerPath;
 
 //Imports for Controllers
-
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 //Default Needed for Swerve
-
 import edu.wpi.first.math.MathUtil;
-//import edu.wpi.first.math.geometry.Pose2d;
-//import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.Blinkin;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
-
 // Import all subsystems for the robot
-
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.LeftClimberArm;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.RightClimberArm;
+import frc.robot.subsystems.Blinkin;
 
 import frc.robot.Commands.TurnToAngle;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -71,73 +54,51 @@ public class RobotContainer {
   private final RightClimberArm m_RightClimberArm = new RightClimberArm();
   private final LeftClimberArm m_LeftClimberArm = new LeftClimberArm();
   
-  private final Blinkin m_Blinkin = new Blinkin();
-
-
   DigitalInput m_FeederStop;
-
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_driveCommandController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
-  
 
   // Establishing the Auto Chooser that will appear on the SmartDashboard
   private final SendableChooser<Command> autoChooser;
-  
-  
-
-
-
-
   
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     
-
-    
   m_FeederStop = new DigitalInput(9);
 
-
-    // Add all actions to PathPlanner
+  // Add all actions to PathPlanner
     NamedCommands.registerCommand("Amp Shoot", m_Launcher.getLaunchSpeakerCommand().withTimeout(1.5));
     NamedCommands.registerCommand("Speaker Shoot", m_Launcher.getLaunchSpeakerCommand().withTimeout(2.5));
     NamedCommands.registerCommand("Intake", 
-    m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelIntakeCommand().onlyWhile(m_FeederStop::get)).withTimeout(1.75));  
+                                  m_Intake.getIntakeCommand().alongWith(
+                                  m_Feeder.getFeederWheelIntakeCommand().onlyWhile(
+                                      m_FeederStop::get)).withTimeout(1.75));  
     NamedCommands.registerCommand("Feeder", m_Feeder.getFeederWheelLaunchCommand().withTimeout(.75));
-    
-
     NamedCommands.registerCommand("Intake and Shoot",
-    m_Intake.getIntakeCommand().alongWith(m_Feeder.getFeederWheelLaunchCommand()).withTimeout(.75) );
-
-    NamedCommands.registerCommand("Intake Bottom", m_Intake.getIntakeCommand().onlyWhile(m_FeederStop::get).withTimeout(0.2));
-    
+                                  m_Intake.getIntakeCommand().alongWith(
+                                  m_Feeder.getFeederWheelLaunchCommand()).withTimeout(.75));
+    NamedCommands.registerCommand("Intake Bottom", m_Intake.getIntakeCommand().onlyWhile(
+                                  m_FeederStop::get).withTimeout(0.2));
     NamedCommands.registerCommand("Launch Stop", m_Launcher.setLaunchZero().withTimeout(.1));
     NamedCommands.registerCommand("Intake Stop", m_Intake.setIntakeZero().withTimeout(.1));
     NamedCommands.registerCommand("Feeder Stop", m_Feeder.setFeederZero().withTimeout(.1));
 
-   
-   
-      autoChooser = AutoBuilder.buildAutoChooser("Center 4-Note");
+    autoChooser = AutoBuilder.buildAutoChooser("Center 4-Note");
 
-      SmartDashboard.putData("Auto Chooser", autoChooser); 
+    SmartDashboard.putData("Auto Chooser", autoChooser); 
 
-
-
-
-    // Configure the button bindings
+  // Configure the button bindings
     configureButtonBindings();
 
-    // Configure default commands
+  // Configure default commands
     bindDrive();
 
-
-
   }
-
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -154,17 +115,25 @@ public class RobotContainer {
     //         () -> m_robotDrive.setX(),
     //         m_robotDrive));
 
-            m_driveCommandController.a().whileTrue(new RunCommand(() -> m_robotDrive.setX(),m_robotDrive));
-            m_driveCommandController.rightTrigger().whileTrue(m_RightClimberArm.getRightClimberArmDownCommand());
-            m_driveCommandController.leftTrigger().whileTrue(m_LeftClimberArm.getLeftClimberArmDownCommand());
-            m_driveCommandController.b().whileTrue(new TurnToAngle(m_robotDrive, -60, false));
-            m_driveCommandController.x().whileTrue(new TurnToAngle(m_robotDrive, 60, false));
-            m_driveCommandController.y().toggleOnTrue(
-              m_RightClimberArm.getRightClimberArmUpCommand().withTimeout(8).alongWith
-              (m_LeftClimberArm.getLeftClimberArmUpCommand().withTimeout(8)));
 
-            m_driveCommandController.rightBumper().whileTrue(m_RightClimberArm.getRightClimberArmUpCommand());
-            m_driveCommandController.leftBumper().whileTrue(m_LeftClimberArm.getLeftClimberArmUpCommand());
+
+            m_driveCommandController.a().whileTrue(
+                  new RunCommand(() -> m_robotDrive.setX(),m_robotDrive));
+            m_driveCommandController.rightTrigger().whileTrue(
+                  m_RightClimberArm.getRightClimberArmDownCommand());
+            m_driveCommandController.leftTrigger().whileTrue(
+                  m_LeftClimberArm.getLeftClimberArmDownCommand());
+            m_driveCommandController.b().whileTrue(
+                  new TurnToAngle(m_robotDrive, -60, false));
+            m_driveCommandController.x().whileTrue(
+                  new TurnToAngle(m_robotDrive, 60, false));
+            m_driveCommandController.y().toggleOnTrue(
+                  m_RightClimberArm.getRightClimberArmUpCommand().withTimeout(8).alongWith(
+                  m_LeftClimberArm.getLeftClimberArmUpCommand().withTimeout(8)));
+            m_driveCommandController.rightBumper().whileTrue(
+                  m_RightClimberArm.getRightClimberArmUpCommand());
+            m_driveCommandController.leftBumper().whileTrue(
+                  m_LeftClimberArm.getLeftClimberArmUpCommand());
 
 
           // working command
@@ -175,11 +144,9 @@ public class RobotContainer {
             m_operatorController.y().whileTrue(
                 new ParallelCommandGroup(
                 new RunCommand(() -> m_Launcher.getLaunchSpeakerCommand()),
-                new RunCommand(() -> Blinkin.setRedChase())
+                Blinkin.setRedChase()
                 
                 )); 
-
-
 
             m_operatorController.a().whileTrue(m_Launcher.getLaunchAmpCommand().alongWith());
             m_operatorController.rightTrigger().whileTrue(m_Feeder.getFeederWheelLaunchCommand());
@@ -197,23 +164,16 @@ public class RobotContainer {
               .onlyWhile(m_FeederStop::get).andThen(new ParallelCommandGroup(
                 new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1)),
                 new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 1)),
-                new RunCommand(() -> Blinkin.setGreen())
+                Blinkin.setGreen()
                 
                 ))); 
-
-
-            
-
-
-
-
 
             //Turns off Rumble for both controllers when button not pressed
             m_operatorController.leftTrigger().onFalse(
                 new ParallelCommandGroup(
                     new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)), 
-                    new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 0))
-                    
+                    new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 0)),
+                    Blinkin.setDefault(AllianceColor())
                     )); 
             
             //Working command
@@ -229,11 +189,6 @@ public class RobotContainer {
             //           ))); 
 
 
-
-
-
-
-
           //Added green light wehn note intake successful
 
             m_operatorController.b().whileTrue(
@@ -243,7 +198,7 @@ public class RobotContainer {
                     new ParallelCommandGroup(
                       new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1)),
                       new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 1)),
-                      new RunCommand(() -> Blinkin.setGreen())
+                      Blinkin.setGreen()
                       
                       ))); 
           
@@ -251,7 +206,8 @@ public class RobotContainer {
             m_operatorController.b().onFalse(
                 new ParallelCommandGroup(
                   new RunCommand(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)),
-                  new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 0))
+                  new RunCommand(() -> m_driveCommandController.getHID().setRumble(RumbleType.kBothRumble, 0)),
+                  Blinkin.setDefault(AllianceColor())
                   
                   )); 
 
@@ -356,10 +312,23 @@ public class RobotContainer {
 
         }
 
+    public double AllianceColor() {
 
-        public void bindDrive(){
+        var alliance = DriverStation.getAlliance();
+                            if (alliance.isPresent()) {
+                                if(alliance.get() == DriverStation.Alliance.Red){
+                                  return 0.61; // Number for red color
+                                }else{
+                                  return 0.87; // Number for blue color 
+                                }
+                            }
+                            return -0.41; // Number for OceanWaves
 
-          m_robotDrive.setDefaultCommand(
+        }
+
+      public void bindDrive(){
+
+        m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
@@ -370,10 +339,6 @@ public class RobotContainer {
                 true, true),
             m_robotDrive));
         }
-
-
-    
-
 
 }
 

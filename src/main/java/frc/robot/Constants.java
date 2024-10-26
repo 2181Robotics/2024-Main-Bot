@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.util.regex.Pattern;
-
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.geometry.Translation2d;
@@ -253,9 +251,6 @@ public final class Constants {
     public static final double kFreeSpeedRpm = 5676;
   }
 
-
-
-
   public static class Colors {
     public double pat1_larscan = -0.01;
     public double pat2_larScan = 0.19;
@@ -290,17 +285,8 @@ public final class Constants {
     public double gray = 0.95;
     public double dark_gray = 0.97;
     public double black = 0.99;
-
     public double OceanWaves = -0.41;
-
     public double RedChase = -0.31;    
-    
-    
   }
-
-
-
-
-
 
 }

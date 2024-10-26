@@ -7,11 +7,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
-//import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
 
 public class LeftClimberArm extends SubsystemBase{
     CANSparkMax m_LeftClimberArm;
@@ -30,14 +27,6 @@ public class LeftClimberArm extends SubsystemBase{
     m_LeftClimberArm.restoreFactoryDefaults();
     m_LeftClimberArm.setInverted(false);
 
-    // m_LeftClimberArm.enableSoftLimit(SoftLimitDirection.kForward, true);
-    // m_LeftClimberArm.enableSoftLimit(SoftLimitDirection.kReverse, true);
-    // m_LeftClimberArm.setSoftLimit(SoftLimitDirection.kForward, -20);
-    // m_LeftClimberArm.setSoftLimit(SoftLimitDirection.kReverse, -320);
-
-
-
-
     LeftClimberArmPID = m_LeftClimberArm.getPIDController();
 
         LeftClimberArmPID.setP(climbP);
@@ -46,21 +35,7 @@ public class LeftClimberArm extends SubsystemBase{
         LeftClimberArmPID.setFF(climbFF);
         LeftClimberArmPID.setOutputRange(0.0, 1.0);
         m_LeftClimberArm.burnFlash();
-
     }
-
-    // public Command getAutoLeftClimberArmUP() {
-    //   return this.runEnd(
-    //     () -> {
-    //        LeftClimberArmPID.setReference(LeftClimberArmPosition, ControlType.kPosition);
-    //     },
-
-    //     () -> {
-    //       setLeftClimberArm(0);
-    //     });
-
-    // } 
-    
 
       public Command getLeftClimberArmUpCommand() {
         // The startEnd helper method takes a method to call when the command is initialized and one to
@@ -76,6 +51,7 @@ public class LeftClimberArm extends SubsystemBase{
               stop();
             });
       }
+
     public Command getLeftClimberArmDownCommand() {
         // The startEnd helper method takes a method to call when the command is initialized and one to
         // call when it ends

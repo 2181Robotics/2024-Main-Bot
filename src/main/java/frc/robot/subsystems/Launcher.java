@@ -13,7 +13,6 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 
-
 public class Launcher extends SubsystemBase {
   CANSparkMax m_BottomLaunchWheel;
   CANSparkMax m_TopLaunchWheel;
@@ -23,9 +22,6 @@ public class Launcher extends SubsystemBase {
 
   SmartdashboardItem m_TopLaunchWheelCommandSpeed;
   SmartdashboardItem m_BottomLaunchWheelCommandSpeed;
-
-  // CANSparkMax kBottomLaunchWheel;
-  // CANSparkMax kTopLaunchWheel;
 
   private SparkPIDController bottomPID;
   private SparkPIDController topPID;  
@@ -76,7 +72,7 @@ public class Launcher extends SubsystemBase {
     m_BottomLaunchWheelCommandSpeed = new SmartdashboardItem("BottomLaunchCommandSpeed");
 
 
-     m_controller = new CommandXboxController(1);
+    m_controller = new CommandXboxController(1);
   }
 
   /**
@@ -128,7 +124,6 @@ public class Launcher extends SubsystemBase {
     m_TopLaunchWheel.set(speed);
   }
 
-
     public Command getLaunchAmpCommand() {
     // The startEnd helper method takes a method to call when the command is initialized and one to
     // call when it ends
@@ -155,14 +150,12 @@ public class Launcher extends SubsystemBase {
     m_TopLaunchWheel.set(speed);
   }
 
-
   // A helper method to stop both wheels. You could skip having a method like this and call the
   // individual accessors with speed = 0 instead
   public void getEncoders() {
     m_BottomLauchWheelSpeed.setNumber(m_BottomLaunchWheel.getEncoder().getVelocity());
     m_TopLaunchWheelSpeed.setNumber(m_TopLaunchWheel.getEncoder().getVelocity());
   }
-
 
   @Override
   public void periodic() {
